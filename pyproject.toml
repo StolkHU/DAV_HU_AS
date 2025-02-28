@@ -1,0 +1,15 @@
+[project]
+name = "dav-hu-as"
+version = "0.1.0"
+description = "This is the code for the assignments of Adriaan Stolk for the course Data Analysis and Visualization"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyter>=1.1.1",
+    "loguru>=0.7.3",
+    "matplotlib>=3.10.1",
+    "numpy>=2.2.3",
+    "pandas>=2.2.3",
+    "pathlib>=1.0.1",
+    "seaborn>=0.13.2",
+]
