@@ -11,7 +11,6 @@ def categorical_visualization():
     configfile = Path("./config.toml").resolve()
     with configfile.open("rb") as f:
         config = tomllib.load(f)
-    print(config)
 
     root = Path("./").resolve()
     processed = root / Path(config["processed"])
@@ -50,8 +49,16 @@ def categorical_visualization():
         base_dataframe["message"].str.contains("<Media weggelaten>").astype(int)
     )
 
+    # Berekenen lengte, lengte van player messages en staff messages voor de string
     base_dataframe["message_length"] = base_dataframe["message"].str.len()
+    player_message_count = base_dataframe[
+        base_dataframe["function"] == "Player"
+    ].count()["message"]
+    staff_message_count = base_dataframe[base_dataframe["function"] == "Staff"].count()[
+        "message"
+    ]
 
+    # Dataframe voor de visual
     p1 = (
         base_dataframe[["function", "message_length"]]
         .groupby("function")
@@ -59,13 +66,26 @@ def categorical_visualization():
         .sort_values("message_length", ascending=False)
     )
 
-    sns.barplot(
-        x=p1.index, y=p1["message_length"], palette=["darkolivegreen", "lightgrey"]
-    )
+    # Barplot creëren
+    sns.barplot(x=p1.index, y=p1["message_length"], palette=["red", "lightgrey"])
+    for i, v in enumerate(p1["message_length"]):
+        plt.text(i, v * 0.98, f"{v:.1f}", ha="center", va="top", fontsize=12)
     plt.xlabel("Function within team")
     plt.ylabel("Average Message length")
     plt.title("Staff members sending longer messages")
-    plt.show()
+    plt.figtext(
+        0.05,
+        0.05,
+        f"Gebaseerd op {player_message_count:,}".replace(",", ".")
+        + f" berichten van de players en {staff_message_count:,}".replace(",", ".")
+        + f" berichten van de staff.",
+        ha="left",
+        va="center",
+        fontsize=8,
+        fontstyle="italic",
+    )
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.2)
 
     # Opslaan van de plot
     output_dir = Path("img/automatic")
