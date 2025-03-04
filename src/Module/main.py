@@ -78,7 +78,7 @@ def categorical_visualization():
         0.05,
         f"Gebaseerd op {player_message_count:,}".replace(",", ".")
         + f" berichten van de players en {staff_message_count:,}".replace(",", ".")
-        + f" berichten van de staff.",
+        + " berichten van de staff.",
         ha="left",
         va="center",
         fontsize=8,

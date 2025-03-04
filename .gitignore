@@ -9,6 +9,7 @@ data/raw/*.parq
 *.parquet
 data/processed/*.csv
 data/processed/*.parq
+data/raw/*.json
 *.log
 *.pptx
 .DS_Store
