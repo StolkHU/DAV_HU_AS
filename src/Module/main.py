@@ -15,7 +15,6 @@ def categorical_visualization():
 
     root = Path("./").resolve()
     processed = root / Path(config["processed"])
-    # raw = root / Path(config["raw"])
     datafile = processed / config["current"]
 
     base_dataframe = pd.read_parquet(datafile)
