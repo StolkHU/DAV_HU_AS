@@ -1,5 +1,7 @@
 ### Program to create barchart based on the data ###
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -35,7 +37,7 @@ class BarChart:
 
         plt.figtext(
             0.05,
-            -0.05,
+            0.05,
             f"Gebaseerd op {self.player_message_count:,}".replace(",", ".")
             + f" berichten van de players en {self.staff_message_count:,}".replace(
                 ",", "."
@@ -46,10 +48,12 @@ class BarChart:
             fontsize=8,
             fontstyle="italic",
         )
-
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.1)
-        plt.show()
+        plt.subplots_adjust(bottom=0.2)
+        output_dir = Path("img/automatic")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        plt.savefig(output_dir / "Average Message Length.png")
 
 
 def make_barchart(loaded_dataframe):
