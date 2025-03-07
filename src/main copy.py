@@ -31,8 +31,8 @@ def run_project():
         logging.info("Started data load...")
         loaded_dataframe = dataloader.load_data()
         logging.info("Finished data load succesfully!")
-    except Exception as e:
-        logging.error(f"Error occured during data load... Please fix!")
+    except Exception:
+        logging.error("Error occured during data load... Please fix!")
         print("Error in data load step, see logging files for more information...")
 
     # Step 2: Visualize the bars
@@ -42,8 +42,8 @@ def run_project():
         bar_chart.make_barchart(loaded_dataframe)
         logging.info("Bar chart created!")
         print("Bar chart created!")
-    except Exception as e:
-        logging.error(f"Error occured during visualising bar chart.. Please fix!")
+    except Exception:
+        logging.error("Error occured during visualising bar chart.. Please fix!")
         print(
             "Error in bar chart visualising step, see logging files for more information..."
         )

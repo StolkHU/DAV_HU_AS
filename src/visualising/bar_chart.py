@@ -40,7 +40,7 @@ class BarChart:
             + f" berichten van de players en {self.staff_message_count:,}".replace(
                 ",", "."
             )
-            + f" berichten van de staff.",
+            + " berichten van de staff.",
             ha="left",
             va="center",
             fontsize=8,
