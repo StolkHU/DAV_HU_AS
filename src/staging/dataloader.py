@@ -8,12 +8,14 @@ import pandas as pd
 
 # Class to load in the data
 class ConfigLoader:
-    def __init__(self, config_path):
+    def __init__(self, config_path, datafile=None):
         self.config_path = Path(config_path).resolve()
         self.config = self.load_config()
         self.root = Path("./").resolve()
         self.processed = self.root / Path(self.config["processed"])
-        self.datafile = self.processed / self.config["current"]
+        self.datafile = self.processed / (
+            datafile if datafile else self.config["current"]
+        )
         self.df = self.load_dataframe()
 
     def load_config(self):
