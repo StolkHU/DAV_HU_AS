@@ -1,11 +1,7 @@
 ## A python program for a Base Plot
 
-from typing import List, Optional
 
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-from pydantic import BaseModel
 
 from wa_analysis.settings import PlotSettings
 

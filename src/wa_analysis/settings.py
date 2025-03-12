@@ -1,10 +1,7 @@
 ## A settings python program
 
-from typing import List, Optional
+from typing import Optional
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 from pydantic import BaseModel
 
 

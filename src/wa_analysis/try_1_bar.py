@@ -1,12 +1,7 @@
-from pathlib import Path
-from typing import List, Optional
-
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 
 from wa_analysis.colored_bar_chart import ColoredBarPlot
-from wa_analysis.config import ConfigLoader
 from wa_analysis.playerdataloader import DataLoader
 from wa_analysis.settings import ColoredPlotSettings, MessageCalculations
 
