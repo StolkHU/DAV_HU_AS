@@ -3,7 +3,6 @@ import pandas as pd
 
 from wa_analysis.colored_bar_chart import ColoredBarPlot
 from wa_analysis.config import ConfigLoader
-from wa_analysis.dataloader import BaseDataLoader
 from wa_analysis.dataprocessor import DataProcessor
 from wa_analysis.role_merger import Merger
 from wa_analysis.settings import ColoredPlotSettings, MessageCalculations

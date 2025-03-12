@@ -1,5 +1,3 @@
-import pandas as pd
-
 from wa_analysis.config import ConfigLoader
 from wa_analysis.dataloader import BaseDataLoader
 

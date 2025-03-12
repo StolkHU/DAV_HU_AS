@@ -1,12 +1,9 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 
-from wa_analysis.colored_bar_chart import ColoredBarPlot
 from wa_analysis.config import ConfigLoader
-from wa_analysis.dataloader import BaseDataLoader
 from wa_analysis.dataprocessor import DataProcessor
 from wa_analysis.role_merger import Merger
-from wa_analysis.settings import ColoredPlotSettings, MessageCalculations
+from wa_analysis.settings import ColoredPlotSettings
 from wa_analysis.try_1_bar import HockeyBarChart
 
 if __name__ == "__main__":
