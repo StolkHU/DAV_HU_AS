@@ -1,11 +1,18 @@
+import pandas as pd
+
+from wa_analysis.config import ConfigLoader
 from wa_analysis.dataloader import BaseDataLoader
 
 
 class DataProcessor(BaseDataLoader):
-    def __init__(self, config, role_file):
+    def __init__(self, config, datafile=None):
         # Roep de init van de superklasse aan om de data in te laden
-        super().__init__(config)
-        self.role_file = role_file
+        super().__init__(config, datafile)
+        if self.df is not None:
+            self.altered_dataframe = self.df.copy()
+        else:
+            self.altered_dataframe = None
+        self.altered_dataframe = self.df.copy()
 
     def add_columns(self):
         """
@@ -34,12 +41,13 @@ class DataProcessor(BaseDataLoader):
             .str.contains("<https://tikkie.me")
             .astype(int)
         )
-        self.altered_dataframe["message_length"] = self.altered_dataframe[
-            "message"
-        ].str.len()
-
-    def get_processed_data(self):
-        """
-        Haal de verwerkte DataFrame op.
-        """
         return self.altered_dataframe
+
+
+if __name__ == "__main__":
+    config_loader = ConfigLoader()
+    processor = DataProcessor(
+        config=config_loader.config, datafile=config_loader.datafile
+    )
+    altered = processor.add_columns()
+    print(altered.shape)

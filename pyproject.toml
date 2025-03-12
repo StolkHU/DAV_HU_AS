@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "black>=25.1.0",
+    "dataclasses>=0.8",
     "fastparquet>=2024.11.0",
     "isort>=6.0.1",
     "jupyter>=1.1.1",
