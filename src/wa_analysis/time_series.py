@@ -105,7 +105,7 @@ class Plotter:
         plt.subplots_adjust(bottom=0.08)
 
         # Output folder en opslaan van de visual
-        output_dir = Path("img/automatic")
+        output_dir = Path("img")
         output_dir.mkdir(parents=True, exist_ok=True)
         plt.savefig(output_dir / "Photoboom.png")
 

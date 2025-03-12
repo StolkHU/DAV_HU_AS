@@ -4,9 +4,17 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+from module.colored_bar_chart import ColoredBarPlot
+
+settings = ColoredBarPlot(
+    title="Staff sending longer messages",
+    xlabel="Function within Team",
+    ylabel="Average Message Length",
+    legend_title="Average Message Length",
+)
 
 
-class BarChart:
+class HockeyBarChart:
     def __init__(self, dataframe):
         self.dataframe = dataframe
         self.add_message_length()
@@ -49,18 +57,17 @@ class BarChart:
             fontstyle="italic",
         )
         plt.tight_layout()
-        plt.subplots_adjust(bottom=0.1)
         plt.subplots_adjust(bottom=0.2)
-        output_dir = Path("img/automatic")
+        output_dir = Path("img")
         output_dir.mkdir(parents=True, exist_ok=True)
         plt.savefig(output_dir / "Average Message Length.png")
 
 
-def make_barchart(loaded_dataframe):
+def make_barchart(dataframe):
     """
     This is the function to be called for running all the steps to create the bar chart visual
     """
-    BarChart(loaded_dataframe)
+    HockeyBarChart(dataframe)
 
 
 if __name__ == "__main__":
