@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from wa_analysis.baseplot import BasePlot
-from wa_analysis.settings import ColoredPlotSettings
+from wa_analysis.settings.baseplot import BasePlot
+from wa_analysis.settings.settings import ColoredPlotSettings
 
 
 class ColoredBarPlot(BasePlot):

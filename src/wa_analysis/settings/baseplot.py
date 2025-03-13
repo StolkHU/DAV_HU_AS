@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 
-from wa_analysis.settings import PlotSettings
+from wa_analysis.settings.settings import PlotSettings
 
 
 # Base Plot class

@@ -1,15 +1,18 @@
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from wa_analysis.colored_bar_chart import ColoredBarPlot
-from wa_analysis.config import ConfigLoader
-from wa_analysis.dataprocessor import DataProcessor
-from wa_analysis.role_merger import Merger
-from wa_analysis.settings import ColoredPlotSettings, MessageCalculations
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.merger import Merger
+from wa_analysis.data_loading.processor import DataProcessor
+from wa_analysis.settings.colored_bar_chart import ColoredBarPlot
+from wa_analysis.settings.settings import (ColoredPlotSettings,
+                                           MessageCalculations)
 
 settings = ColoredPlotSettings(
-    title="Staff sending longer messages",
-    xlabel="Function within Team",
+    title="Staff members sending longer messages",
+    xlabel="Function within the team",
     ylabel="Average Message Length",
     legend_title="Average Message Length",
 )
@@ -72,4 +75,6 @@ if __name__ == "__main__":
     fig = chart.plot_average_message_length(avg_message_length)
 
     # Toon de grafiek
-    plt.savefig("test.png")
+    output_dir = Path(config_loader.output_folder)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_dir / "Average Message Length_wip.png")

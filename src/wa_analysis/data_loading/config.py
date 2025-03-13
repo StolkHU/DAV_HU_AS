@@ -17,6 +17,7 @@ class ConfigLoader:
             self.config["current"]
         )  # gebruik het current bestand
         self.role_file = self.raw / Path(self.config["role_file"])
+        self.output_folder = self.root / Path(self.config["output_folder"])
 
     def load_config(self):
         with self.config_path.open("rb") as f:

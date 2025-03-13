@@ -1,5 +1,5 @@
-from wa_analysis.config import ConfigLoader
-from wa_analysis.dataloader import BaseDataLoader
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.dataloader import BaseDataLoader
 
 
 class DataProcessor(BaseDataLoader):
