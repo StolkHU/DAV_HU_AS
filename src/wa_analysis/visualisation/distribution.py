@@ -3,8 +3,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
-from loguru import logger
 
 configfile = Path("../config.toml").resolve()
 with configfile.open("rb") as f:
