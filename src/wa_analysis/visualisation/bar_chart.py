@@ -1,74 +1,103 @@
-### Program to create barchart based on the data ###
-
-from pathlib import Path
-
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-from module.colored_bar_chart import ColoredBarPlot
 
-settings = ColoredBarPlot(
-    title="Staff sending longer messages",
-    xlabel="Function within Team",
-    ylabel="Average Message Length",
-    legend_title="Average Message Length",
-)
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.merger import Merger
+from wa_analysis.data_loading.processor import DataProcessor
+from wa_analysis.settings.settings import (MessageCalculations, PlotSettings,
+                                           Settings)
+
+settings = PlotSettings("comparing_categories")
 
 
 class HockeyBarChart:
-    def __init__(self, dataframe):
-        self.dataframe = dataframe
-        self.add_message_length()
-        self.player_message_count = self.calculate_message_count("Player")
-        self.staff_message_count = self.calculate_message_count("Staff")
-        self.plot_average_message_length()
+    """Analyseert de berichten van gegroepeerde accounts."""
 
-    def add_message_length(self):
-        self.dataframe["message_length"] = self.dataframe["message"].str.len()
+    def __init__(self, settings: Settings, df: pd.DataFrame):
+        self.plot_settings = settings
+        self.hockeybar_settings = MessageCalculations()
+        self.df = df
 
-    def calculate_message_count(self, function):
-        return self.dataframe[self.dataframe["Function"] == function].count()["message"]
-
-    def plot_average_message_length(self):
-        p1 = (
-            self.dataframe[["Function", "message_length"]]
-            .groupby("Function")
+    def calculate_message_count(self):
+        """Calculate the average message length for each function."""
+        average_message_length = (
+            self.df.groupby(self.hockeybar_settings.function_column)[
+                self.hockeybar_settings.message_length_column
+            ]
             .mean()
-            .sort_values("message_length", ascending=False)
+            .reset_index()
+            .sort_values(
+                by=self.hockeybar_settings.message_length_column, ascending=False
+            )  # Sort by message length
         )
+        return average_message_length
 
-        sns.barplot(x=p1.index, y=p1["message_length"], palette=["red", "lightgrey"])
-        for i, v in enumerate(p1["message_length"]):
+    def plot_average_message_length(self, average_message_length):
+        """Create a bar plot of average message length."""
+        fig, ax = plt.subplots()
+        plt.figure(figsize=(10, 6))
+
+        for i, v in enumerate(
+            average_message_length[self.hockeybar_settings.message_length_column]
+        ):
             plt.text(i, v * 0.98, f"{v:.1f}", ha="center", va="top", fontsize=12)
-        plt.xlabel("Function within team")
-        plt.ylabel("Average Message length")
-        plt.title("Staff members sending longer messages")
 
+        self.plot_settings.apply_settings(ax)
+        fig.suptitle(
+            self.plot_settings.settings.suptitle,
+            fontweight=self.plot_settings.settings.suptitle_fontweight,
+            fontsize=self.plot_settings.settings.suptitle_fontsize,
+        )
         plt.figtext(
             0.05,
             0.05,
-            f"Gebaseerd op {self.player_message_count:,}".replace(",", ".")
-            + f" berichten van de players en {self.staff_message_count:,}".replace(
-                ",", "."
-            )
-            + " berichten van de staff.",
+            f"Gebaseerd op {self.df.shape[0]:,}".replace(",", ".")
+            + " berichten verstuurd in de groepschat van een hockeyteam."
+            + "\n"
+            + "Staf is iedereen rondom een team die geen speler is: trainer, coach, fysio, etc.",
             ha="left",
             va="center",
-            fontsize=8,
+            fontsize=10,
             fontstyle="italic",
         )
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.2)
-        output_dir = Path("img")
-        output_dir.mkdir(parents=True, exist_ok=True)
-        plt.savefig(output_dir / "Average Message Length.png")
-
-
-def make_barchart(dataframe):
-    """
-    This is the function to be called for running all the steps to create the bar chart visual
-    """
-    HockeyBarChart(dataframe)
+        sns.barplot(
+            x=average_message_length[self.hockeybar_settings.function_column],
+            y=average_message_length[self.hockeybar_settings.message_length_column],
+            palette=["red", "lightgrey"],
+            ax=ax,
+        )
+        fig.savefig("Average Message Length_wip.png")
 
 
 if __name__ == "__main__":
-    bar_chart = make_barchart()
+    # Laad de configuratie en gegevens voor de merge
+    config_loader = ConfigLoader()
+    processor = DataProcessor(
+        config=config_loader.config, datafile=config_loader.datafile
+    )
+    altered_df = processor.add_columns()
+
+    # Gebruik Merger om de data samen te voegen
+    merger = Merger(
+        config=config_loader.config,
+        altered_df=altered_df,
+        role_file=config_loader.role_file,
+    )
+    merged_df = merger.get_processed_data()  # Haal het samengevoegde dataframe op
+
+    # Maak de grafiek met de samengevoegde data
+    chart = HockeyBarChart(settings, merged_df)
+
+    # Bereken de gemiddelde berichtlengte per functie
+    avg_message_length = chart.calculate_message_count()
+
+    # Maak de grafiek van de gemiddelde berichtlengte
+    chart.plot_average_message_length(avg_message_length)
+
+    # # Toon de grafiek
+    # output_dir = Path(config_loader.output_folder)
+    # output_dir.mkdir(parents=True, exist_ok=True)
+    # plt.savefig(output_dir / "Average Message Length_wip.png")

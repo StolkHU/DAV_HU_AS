@@ -8,6 +8,7 @@ class ConfigLoader:
     def __init__(self):
         self.config_path = Path("./config.toml").resolve()
         self.config = self.load_config()
+
         self.root = Path("./").resolve()
         self.processed = self.root / Path(
             self.config["processed"]
