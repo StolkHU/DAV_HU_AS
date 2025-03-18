@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from wa_analysis.config import ConfigLoader
+from wa_analysis.data_loading.config import ConfigLoader
 
 
 # Basis dataloader class. Aan de hand van de folder pakt hij de data

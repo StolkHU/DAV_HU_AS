@@ -1,5 +1,5 @@
-from wa_analysis.config import ConfigLoader
-from wa_analysis.dataloader import BaseDataLoader
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.dataloader import BaseDataLoader
 
 
 class DataProcessor(BaseDataLoader):
@@ -39,6 +39,19 @@ class DataProcessor(BaseDataLoader):
             .str.contains("<https://tikkie.me")
             .astype(int)
         )
+        self.altered_dataframe["message_length"] = self.altered_dataframe[
+            "message"
+        ].str.len()
+        self.altered_dataframe["prev_author"] = self.altered_dataframe["author"].shift(
+            1
+        )
+        self.altered_dataframe["prev_timestamp"] = self.altered_dataframe[
+            "timestamp"
+        ].shift(1)
+        self.altered_dataframe["time_since_prev"] = (
+            self.altered_dataframe["timestamp"]
+            - self.altered_dataframe["prev_timestamp"]
+        ).dt.total_seconds() / 60
         return self.altered_dataframe
 
 
