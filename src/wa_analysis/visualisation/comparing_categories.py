@@ -37,11 +37,22 @@ class HockeyBarChart:
         """Create a bar plot of average message length."""
         fig, ax = plt.subplots()
         plt.figure(figsize=(10, 6))
-
-        for i, v in enumerate(
-            average_message_length[self.hockeybar_settings.message_length_column]
-        ):
-            plt.text(i, v * 0.98, f"{v:.1f}", ha="center", va="top", fontsize=12)
+        sns.barplot(
+            x=average_message_length[self.hockeybar_settings.function_column],
+            y=average_message_length[self.hockeybar_settings.message_length_column],
+            palette=["red", "lightgrey"],
+            ax=ax,
+        )
+        # Datalabels toevoegen aan de bars
+        for p in ax.patches:
+            ax.annotate(
+                f"{p.get_height():.1f}",
+                (p.get_x() + p.get_width() / 2.0, p.get_height()),
+                ha="center",
+                va="center",
+                xytext=(0, -10),
+                textcoords="offset points",
+            )
 
         self.plot_settings.apply_settings(ax)
         fig.suptitle(
@@ -58,25 +69,19 @@ class HockeyBarChart:
             + "Staf is iedereen rondom een team die geen speler is: trainer, coach, fysio, etc.",
             ha="left",
             va="center",
-            fontsize=10,
-            fontstyle="italic",
         )
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.2)
-        sns.barplot(
-            x=average_message_length[self.hockeybar_settings.function_column],
-            y=average_message_length[self.hockeybar_settings.message_length_column],
-            palette=["red", "lightgrey"],
-            ax=ax,
-        )
-        fig.savefig("Average Message Length_wip.png")
+
+        # Sla de plot op met de geconfigureerde instellingen
+        self.plot_settings.save_plot(fig)
 
 
 if __name__ == "__main__":
     # Laad de configuratie en gegevens voor de merge
     config_loader = ConfigLoader()
     processor = DataProcessor(
-        config=config_loader.config, datafile=config_loader.datafile
+        config=config_loader.config, datafile=config_loader.datafile_hockeyteam
     )
     altered_df = processor.add_columns()
 
@@ -96,8 +101,3 @@ if __name__ == "__main__":
 
     # Maak de grafiek van de gemiddelde berichtlengte
     chart.plot_average_message_length(avg_message_length)
-
-    # # Toon de grafiek
-    # output_dir = Path(config_loader.output_folder)
-    # output_dir.mkdir(parents=True, exist_ok=True)
-    # plt.savefig(output_dir / "Average Message Length_wip.png")

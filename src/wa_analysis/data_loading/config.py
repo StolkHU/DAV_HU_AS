@@ -14,9 +14,12 @@ class ConfigLoader:
             self.config["processed"]
         )  # pad naar de processed-folder
         self.raw = self.root / Path(self.config["raw"])  # pad naar de raw-folder
-        self.datafile = self.processed / (
+        self.datafile_hockeyteam = self.processed / (
             self.config["current"]
-        )  # gebruik het current bestand
+        )  # gebruik het hockeyteam bestand
+        self.datafile_wife = self.processed / (
+            self.config["wife_file"]
+        )  # gebruik het wife bestand
         self.role_file = self.raw / Path(self.config["role_file"])
         self.output_folder = self.root / Path(self.config["output_folder"])
 

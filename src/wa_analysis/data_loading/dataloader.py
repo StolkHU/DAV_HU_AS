@@ -44,7 +44,9 @@ class BaseDataLoader:
 
 if __name__ == "__main__":
     config_loader = ConfigLoader()
-    data_loader = BaseDataLoader(
-        config=config_loader.config, datafile=config_loader.datafile
+    data_loader_hockey = BaseDataLoader(
+        config=config_loader.config, datafile=config_loader.datafile_hockeyteam
     )
-    print(data_loader.df.shape)
+    data_loader_wife = BaseDataLoader(
+        config=config_loader.config, datafile=config_loader.datafile_wife
+    )

@@ -31,11 +31,13 @@ class DataProcessor(BaseDataLoader):
         self.altered_dataframe["year"] = self.altered_dataframe["timestamp"].dt.year
         self.altered_dataframe["has_image"] = (
             self.altered_dataframe["message"]
+            .fillna("")
             .str.contains("<Media weggelaten>")
             .astype(int)
         )
         self.altered_dataframe["has_tikkie"] = (
             self.altered_dataframe["message"]
+            .fillna("")
             .str.contains("<https://tikkie.me")
             .astype(int)
         )
@@ -58,7 +60,7 @@ class DataProcessor(BaseDataLoader):
 if __name__ == "__main__":
     config_loader = ConfigLoader()
     processor = DataProcessor(
-        config=config_loader.config, datafile=config_loader.datafile
+        config=config_loader.config, datafile=config_loader.datafile_wife
     )
     altered = processor.add_columns()
     print(altered.shape)

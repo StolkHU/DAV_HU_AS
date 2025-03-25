@@ -18,8 +18,16 @@ class BasePlot:
     def create_figure(self):
         """Create a figure and configure it based on settings."""
         self.fig, self.ax = plt.subplots(figsize=self.settings.figsize)
-        self.ax.set_xlabel(self.settings.xlabel)
-        self.ax.set_ylabel(self.settings.ylabel)
+        self.ax.set_xlabel(
+            self.settings.xlabel,
+            fontsize=self.settings.xlabel_fontsize,
+            fontweight=self.settings.xlabel_fontweight,
+        )
+        self.ax.set_ylabel(
+            self.settings.ylabel,
+            fontsize=self.settings.ylabel_fontsize,
+            fontweight=self.settings.ylabel_fontweight,
+        )
         self.ax.set_title(self.settings.title)
         self.ax.set_suptitle(self.settings.suptitle)
         if self.settings.legend_title is not None:

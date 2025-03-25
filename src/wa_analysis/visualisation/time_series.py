@@ -1,76 +1,62 @@
-### Python program to create a time series visualisation ###
-
-import tomllib
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.processor import DataProcessor
+from wa_analysis.settings.settings import PlotSettings
 
-# Class to load in the data
-# This class needs to go and filled with the class from staging.dataloader
-class ConfigLoader:
-    def __init__(self, config_path, datafile=None):
-        self.config_path = Path(config_path).resolve()
-        self.config = self.load_config()
-        self.root = Path("./").resolve()
-        self.processed = self.root / Path(self.config["processed"])
-        self.datafile = self.processed / (
-            datafile if datafile else self.config["current"]
-        )
-        self.df = self.load_dataframe()
-
-    def load_config(self):
-        with self.config_path.open("rb") as f:
-            return tomllib.load(f)
-
-    def load_dataframe(self):
-        return pd.read_parquet(self.datafile)
+settings = PlotSettings("time_series")
 
 
-# Class to process the data and give a 1 for the messages with images
-class DataProcessor:
-    def __init__(self, df):
-        self.df = df
-        self.df["has_image"] = (
-            self.df["message"].fillna("").str.contains("<Media weggela").astype(int)
-        )
+class PhotoPlotter:
+    def __init__(self, plot_settings: PlotSettings, data_processor: DataProcessor):
+        """
+        Constructor voor PhotoPlotter
+        """
+        self.plot_settings = plot_settings
+        self.data_processor = data_processor
+        self.df = data_processor.altered_dataframe
 
-    def photo_percentage_per_month(self):
-        return (
-            self.df.groupby(self.df["timestamp"].dt.to_period("Q"))["has_image"].mean()
+    def photo_percentage_per_quarter(self):
+        """
+        Bereken percentage foto's per maand
+        """
+        photos_per_quarter = (
+            self.df.groupby(pd.Grouper(key="timestamp", freq="QE"))["has_image"].mean()
             * 100
         )
 
-    def date_range(self):
-        dates = self.df["timestamp"].dt.date
-        min_date = dates.min()
-        max_date = dates.max()
-        number_of_days = (max_date - min_date).days
-        average = len(self.df) / number_of_days
-        return min_date, max_date, number_of_days, average
+        return photos_per_quarter
 
+    def plot_photos_percentage_per_quarter(self):
+        """
+        Maak de plot van foto percentages per quarter
+        """
+        # Bereken foto percentages
+        photos_percentage_per_quarter = self.photo_percentage_per_quarter()
 
-# Class for plotting the barchart of the timeseries
-class Plotter:
-    def __init__(self, data_processor):
-        self.data_processor = data_processor
+        # Bepaal datum range
+        min_date = self.df["timestamp"].min()
+        max_date = self.df["timestamp"].max()
 
-    def plot_photos_percentage_per_month(self):
-        photos_percentage_per_month = self.data_processor.photo_percentage_per_month()
-        min_date, max_date, number_of_days, average = self.data_processor.date_range()
+        # Maak de figuur
+        fig, ax = plt.subplots(figsize=(20, 10))
 
-        # Plot code, using Func Formatter for de percentages op de Y-as
-        plt.figure(figsize=(20, 10))
-        ax = plt.gca()
+        # Formatter voor Y-as percentages
         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0f}%"))
 
-        # Aanpassen kleur naar hotpink vanaf Q3-2022
+        # Kleur selectie
         colors = [
-            "hotpink" if period >= pd.Period("2022-Q3", freq="Q") else "silver"
-            for period in photos_percentage_per_month.index
+            (
+                "hotpink"
+                if pd.Period(period, freq="Q") >= pd.Period("2022-Q3", freq="Q")
+                else "silver"
+            )
+            for period in photos_percentage_per_quarter.index
         ]
-        photos_percentage_per_month.plot(kind="bar", ax=ax, color=colors)
+
+        # Plot de data
+        photos_percentage_per_quarter.plot(kind="bar", ax=ax, color=colors)
 
         # Datalabels toevoegen aan de bars
         for p in ax.patches:
@@ -83,41 +69,61 @@ class Plotter:
                 textcoords="offset points",
             )
 
-        # Tweaken van de visual
-        plt.suptitle('"Photoboom"', size=30, fontweight="bold")
-        plt.title(
-            "Het percentage foto's stijgt aanzienlijk na de geboorte van onze dochter in November '22",
-            fontstyle="italic",
-            pad=25,
-            size=16,
-        )
-        plt.xlabel("")
-        plt.xticks(rotation=0)
+        # Pas plot-instellingen toe
+        self.plot_settings.apply_settings(ax)
+
+        # Extra tekstuele annotaties
         plt.figtext(
             0.01,
             0.01,
-            f"Gebaseerd op {self.data_processor.df.shape[0]:,}".replace(",", ".")
+            f"Gebaseerd op {self.df.shape[0]:,}".replace(",", ".")
             + f' berichten tussen {min_date.strftime("%d-%m-%Y")} en {max_date.strftime("%d-%m-%Y")}.',
             ha="left",
             fontsize=16,
         )
+
+        ax.set_xticks(range(len(photos_percentage_per_quarter.index)))
+        ax.set_xticklabels(
+            [
+                f"{period.year} Q{period.quarter}"
+                for period in photos_percentage_per_quarter.index
+            ],
+            rotation=0,
+        )
+
+        plt.xticks(rotation=0)
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.08)
 
-        # Output folder en opslaan van de visual
-        output_dir = Path("img")
-        output_dir.mkdir(parents=True, exist_ok=True)
-        plt.savefig(output_dir / "Photoboom.png")
+        # Sla de plot op met de geconfigureerde instellingen
+        self.plot_settings.save_plot(fig)
 
 
-# Voor het draaien van main.py
 def make_timeseries():
-    wife_file = ConfigLoader("./config.toml", datafile="wife.parq")
-    data_processor = DataProcessor(wife_file.df)
-    plotter = Plotter(data_processor)
+    """
+    Maak de tijdreeks visualisatie
+    """
+    # Laad configuratie
+    config_loader = ConfigLoader()
 
-    plotter.plot_photos_percentage_per_month()
+    # Maak data processor aan
+    data_processor = DataProcessor(
+        config=config_loader.config, datafile=config_loader.datafile_wife
+    )
+
+    # Voeg kolommen toe
+    # Let op: add_columns() retourneert de DataFrame
+    data_processor.altered_dataframe = data_processor.add_columns()
+
+    # Maak plot settings aan
+    plot_settings = PlotSettings("time_series")
+
+    # Maak de chart aan met data processor
+    chart = PhotoPlotter(plot_settings, data_processor)
+
+    # Plot de foto percentage per maand
+    chart.plot_photos_percentage_per_quarter()
 
 
 if __name__ == "__main__":
-    time_series = make_timeseries()
+    make_timeseries()
