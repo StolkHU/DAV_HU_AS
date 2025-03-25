@@ -27,40 +27,29 @@ def run_project():
 
     # Step 1: Load the data
     try:
-        print("Started data load...")
         logging.info("Started data load...")
         loaded_dataframe = dataloader.load_data()
         logging.info("Finished data load succesfully!")
     except Exception:
         logging.error("Error occured during data load... Please fix!")
-        print("Error in data load step, see logging files for more information...")
 
     # Step 2: Visualize the bars
     try:
-        print("Started visualising bar chart...")
         logging.info("Started visualising bar chart...")
         bar_chart.make_barchart(loaded_dataframe)
         logging.info("Bar chart created!")
         print("Bar chart created!")
     except Exception:
         logging.error("Error occured during visualising bar chart.. Please fix!")
-        print(
-            "Error in bar chart visualising step, see logging files for more information..."
-        )
 
     # Step 3: Visualize the time series chart
     try:
-        print("Started visualising time series chart...")
         logging.info("Started visualising time series chart...")
         time_series.make_timeseries()
         logging.info("Time series chart created!")
-        print("Time series chart created!")
     except Exception:
         logging.error(
             "Error occured during visualising time series chart.. Please fix!"
-        )
-        print(
-            "Error in time series chart visualising step, see logging files for more information..."
         )
 
 
