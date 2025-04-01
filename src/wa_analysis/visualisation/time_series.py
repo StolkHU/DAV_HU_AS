@@ -30,20 +30,19 @@ class PhotoPlotter:
 
     def plot_photos_percentage_per_quarter(self):
         """
-        Maak de plot van foto percentages per quarter
+        Maak de plot van foto percentages per quarter met zwarte rolling average lijn
         """
         # Bereken foto percentages
         photos_percentage_per_quarter = self.photo_percentage_per_quarter()
-
-        # Bepaal datum range
-        min_date = self.df["timestamp"].min()
-        max_date = self.df["timestamp"].max()
+        rolling_avg = photos_percentage_per_quarter.rolling(window=4).mean()
 
         # Maak de figuur
         fig, ax = plt.subplots(figsize=(20, 10))
 
         # Formatter voor Y-as percentages
         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0f}%"))
+
+        ax.tick_params(axis="y", labelsize=self.plot_settings.settings.ylabel_fontsize)
 
         # Kleur selectie
         colors = [
@@ -56,7 +55,26 @@ class PhotoPlotter:
         ]
 
         # Plot de data
-        photos_percentage_per_quarter.plot(kind="bar", ax=ax, color=colors)
+        photos_percentage_per_quarter.plot(
+            kind="bar", ax=ax, color=colors, zorder=1, label="_nolegend_"
+        )
+
+        # Bereid x-posities voor voor de rolling average lijn
+        x_positions = range(len(photos_percentage_per_quarter.index))
+
+        # Plot rolling Average
+        ax.plot(
+            x_positions,
+            rolling_avg.values,
+            color="black",
+            linewidth=3,
+            marker="o",
+            markersize=8,
+            label="Rolling Average (4 quarters)",
+            zorder=2,
+        )
+
+        ax.legend(fontsize=12)
 
         # Datalabels toevoegen aan de bars
         for p in ax.patches:
@@ -72,15 +90,8 @@ class PhotoPlotter:
         # Pas plot-instellingen toe
         self.plot_settings.apply_settings(ax)
 
-        # Extra tekstuele annotaties
-        plt.figtext(
-            0.01,
-            0.01,
-            f"Gebaseerd op {self.df.shape[0]:,}".replace(",", ".")
-            + f' berichten tussen {min_date.strftime("%d-%m-%Y")} en {max_date.strftime("%d-%m-%Y")}.',
-            ha="left",
-            fontsize=16,
-        )
+        # Tight layout voor de figtext
+        # plt.tight_layout()
 
         ax.set_xticks(range(len(photos_percentage_per_quarter.index)))
         ax.set_xticklabels(
@@ -88,12 +99,20 @@ class PhotoPlotter:
                 f"{period.year} Q{period.quarter}"
                 for period in photos_percentage_per_quarter.index
             ],
-            rotation=0,
+            rotation=self.plot_settings.settings.xlabel_rotation,
+            fontsize=self.plot_settings.settings.xlabel_fontsize,
         )
 
-        plt.xticks(rotation=0)
-        plt.tight_layout()
-        plt.subplots_adjust(bottom=0.08)
+        # plt.subplots_adjust(bottom=0.2)  # Extra ruimte onderaan voor figtext
+
+        # Extra tekstuele annotaties
+        plt.figtext(
+            self.plot_settings.settings.figtext_x,
+            self.plot_settings.settings.figtext_y,
+            self.plot_settings.settings.figtext,
+            ha=self.plot_settings.settings.figtext_ha,
+            fontsize=self.plot_settings.settings.figtext_fontsize,
+        )
 
         # Sla de plot op met de geconfigureerde instellingen
         self.plot_settings.save_plot(fig)
