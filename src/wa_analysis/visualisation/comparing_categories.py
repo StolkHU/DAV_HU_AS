@@ -35,8 +35,8 @@ class HockeyBarChart:
 
     def plot_average_message_length(self, average_message_length):
         """Create a bar plot of average message length."""
-        fig, ax = plt.subplots()
-        plt.figure(figsize=(10, 6))
+        fig, ax = plt.subplots(figsize=(10, 8))
+        # plt.figure(figsize=(20,10))
         sns.barplot(
             x=average_message_length[self.hockeybar_settings.function_column],
             y=average_message_length[self.hockeybar_settings.message_length_column],
@@ -60,18 +60,20 @@ class HockeyBarChart:
             fontweight=self.plot_settings.settings.suptitle_fontweight,
             fontsize=self.plot_settings.settings.suptitle_fontsize,
         )
+
+        plt.tight_layout()
         plt.figtext(
-            0.05,
-            0.05,
+            self.plot_settings.settings.figtext_x,
+            self.plot_settings.settings.figtext_y,
             f"Gebaseerd op {self.df.shape[0]:,}".replace(",", ".")
             + " berichten verstuurd in de groepschat van een hockeyteam."
             + "\n"
             + "Staf is iedereen rondom een team die geen speler is: trainer, coach, fysio, etc.",
-            ha="left",
-            va="center",
+            ha=self.plot_settings.settings.figtext_ha,
+            va=self.plot_settings.settings.figtext_va,
         )
-        plt.tight_layout()
-        plt.subplots_adjust(bottom=0.2)
+
+        plt.subplots_adjust(bottom=self.plot_settings.settings.subplot_adjust_bottom)
 
         # Sla de plot op met de geconfigureerde instellingen
         self.plot_settings.save_plot(fig)

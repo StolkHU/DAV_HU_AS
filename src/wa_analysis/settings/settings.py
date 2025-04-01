@@ -1,6 +1,5 @@
 ## A settings python program
 
-
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
@@ -20,6 +19,7 @@ class Settings:
     xlabel: str = "X"
     xlabel_fontsize: int = 12
     xlabel_fontweight: str = "bold"
+    xlabel_rotation: int = 0
     ylabel: str = "Y"
     ylabel_fontsize: int = 12
     ylabel_fontweight: str = "bold"
@@ -30,6 +30,13 @@ class Settings:
     color_palette: Optional[Union[str, list]] = None
     color: Optional[Union[str, list]] = None
     save_as: str = "Unnamed visual.png"
+    figtext: str = None
+    figtext_x: Union[float, None] = None
+    figtext_y: Union[float, None] = None
+    figtext_fontsize: int = 12
+    figtext_ha: str = "left"
+    figtext_va: str = "center"
+    subplot_adjust_bottom: Union[float, None] = None
 
 
 class PlotSettings:
@@ -84,6 +91,7 @@ class PlotSettings:
             xlabel=config_visual.get("xlabel", "X"),
             xlabel_fontsize=config_visual.get("xlabel_fontsize", 12),
             xlabel_fontweight=config_visual.get("xlabel_fontweight", "bold"),
+            xlabel_rotation=config_visual.get("xlabel_rotation"),
             ylabel=config_visual.get("ylabel", "Y"),
             ylabel_fontsize=config_visual.get("ylabel_fontsize", 12),
             ylabel_fontweight=config_visual.get("ylabel_fontweight", "bold"),
@@ -94,6 +102,13 @@ class PlotSettings:
             color_palette=config_visual.get("color_palette"),
             color=config_visual.get("color"),
             save_as=config_visual.get("save_as", "Unnamed visual.png"),
+            figtext=config_visual.get("figtext"),
+            figtext_x=config_visual.get("figtext_x"),
+            figtext_y=config_visual.get("figtext_y"),
+            figtext_fontsize=config_visual.get("figtext_fontsize", 12),
+            figtext_ha=config_visual.get("figtext_ha", "left"),
+            figtext_va=config_visual.get("figtext_va", "center"),
+            subplot_adjust_bottom=config_visual.get("subplot_adjust_bottom"),
         )
 
     def apply_settings(self, ax, suptitle: Optional[str] = None):
