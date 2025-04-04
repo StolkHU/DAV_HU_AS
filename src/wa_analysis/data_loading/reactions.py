@@ -11,6 +11,7 @@ class ReactionsAdder(DataProcessor):
         """
         Haalt berichten eruit die geen beantwoorder hebben
         """
+        self.df = self.df[self.df["prev_author"].notna()]
         self.df = self.df[self.df["author"] != self.df["prev_author"]].copy()
         return self.df
 
