@@ -6,7 +6,6 @@ from loguru import logger
 
 from wa_analysis.data_analysis.model import TextClustering
 from wa_analysis.data_loading.config import ConfigLoader
-from wa_analysis.data_loading.merger import Merger
 from wa_analysis.data_loading.processor import DataProcessor
 from wa_analysis.data_loading.reactions import ReactionsAdder
 from wa_analysis.settings.settings import PlotSettings
@@ -25,7 +24,7 @@ class Clustering:
 
     def _create_corpus(self):
         self.df = self.df.groupby("author").filter(lambda x: len(x) > 350)
-        logger.info(f"Cleaning authors with less than 351 messages")
+        logger.info("Cleaning authors with less than 351 messages")
         authors = list(np.unique(self.df.author))
         corpus = {}
         for author in authors:
@@ -37,7 +36,7 @@ class Clustering:
         return corpus
 
     def _create_custom_palette(self):
-        logger.info(f"Creating a custom palette")
+        logger.info("Creating a custom palette")
         unique_labels = list(set(self.wa_labels))
         return {
             label: "red" if label == "motley-fox" else "silver"
@@ -45,7 +44,7 @@ class Clustering:
         }
 
     def plot_clustering(self):
-        logger.info(f"Create the clustering plot")
+        logger.info("Create the clustering plot")
         plt.figure(figsize=(12, 8), tight_layout=False)
 
         clustering = TextClustering()
@@ -58,7 +57,7 @@ class Clustering:
         self._customize_plot()
 
     def _plot(self, xx: np.ndarray, labels: list) -> None:
-        logger.info(f"Plotting the data in a scatterplot")
+        logger.info("Plotting the data in a scatterplot")
         sns.scatterplot(
             x=xx[:, 0],
             y=xx[:, 1],
@@ -69,7 +68,7 @@ class Clustering:
         )
 
     def _customize_plot(self):
-        logger.info(f"Customizing the plot")
+        logger.info("Customizing the plot")
         scatter = plt.gca().collections[0]
         scatter.set_edgecolor("white")
         scatter.set_linewidth(0.5)
@@ -116,7 +115,7 @@ class Clustering:
 
 
 def run_visualizer():
-    logger.info(f"Running the visualizer")
+    logger.info("Running the visualizer")
     config_loader = ConfigLoader()
     processor = DataProcessor(
         config=config_loader.config, datafile=config_loader.datafile_hockeyteam
@@ -130,7 +129,7 @@ def run_visualizer():
 
     visualizer = Clustering(settings, processed_df)
     visualizer.plot_clustering()
-    logger.info(f"Done creating the clustering plot")
+    logger.info("Done creating the clustering plot")
 
 
 if __name__ == "__main__":
