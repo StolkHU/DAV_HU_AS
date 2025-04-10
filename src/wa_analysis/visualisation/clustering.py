@@ -111,11 +111,11 @@ class Clustering:
             horizontalalignment="left",
             fontsize=10,
         )
-        plt.savefig("clustering.png")
+        self.plot_settings.save_plot(plt.gcf())
 
 
-def run_visualizer():
-    logger.info("Running the visualizer")
+def make_clustering():
+
     config_loader = ConfigLoader()
     processor = DataProcessor(
         config=config_loader.config, datafile=config_loader.datafile_hockeyteam
@@ -133,4 +133,6 @@ def run_visualizer():
 
 
 if __name__ == "__main__":
-    run_visualizer()
+    logger.info("Clustering analyse gestart")
+    make_clustering()
+    logger.info("Clustering analyse afgerond!")

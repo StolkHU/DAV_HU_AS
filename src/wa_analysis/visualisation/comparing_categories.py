@@ -65,21 +65,19 @@ class HockeyBarChart:
         plt.figtext(
             self.plot_settings.settings.figtext_x,
             self.plot_settings.settings.figtext_y,
-            f"Gebaseerd op {self.df.shape[0]:,}".replace(",", ".")
-            + " berichten verstuurd in de groepschat van een hockeyteam."
-            + "\n"
-            + "Staf is iedereen rondom een team die geen speler is: trainer, coach, fysio, etc.",
+            self.plot_settings.settings.figtext,
             ha=self.plot_settings.settings.figtext_ha,
             va=self.plot_settings.settings.figtext_va,
         )
 
+        # Wat ruimte maken voor de figtext
         plt.subplots_adjust(bottom=self.plot_settings.settings.subplot_adjust_bottom)
 
         # Sla de plot op met de geconfigureerde instellingen
         self.plot_settings.save_plot(fig)
 
 
-if __name__ == "__main__":
+def make_comparing_categories():
     # Laad de configuratie en gegevens voor de merge
     config_loader = ConfigLoader()
     processor = DataProcessor(
@@ -103,3 +101,7 @@ if __name__ == "__main__":
 
     # Maak de grafiek van de gemiddelde berichtlengte
     chart.plot_average_message_length(avg_message_length)
+
+
+if __name__ == "__main__":
+    make_comparing_categories()

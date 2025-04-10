@@ -176,8 +176,10 @@ class PlotSettings:
         save_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Sla de figuur op
-        fig.savefig(save_path)
-        print(f"Plot opgeslagen als: {save_path}")
+        fig.savefig(save_path, bbox_inches="tight")
+        print(
+            f"Plot opgeslagen als: {save_filename} in de map {self.settings.output_folder}"
+        )
 
 
 class MessageCalculations(BaseModel):

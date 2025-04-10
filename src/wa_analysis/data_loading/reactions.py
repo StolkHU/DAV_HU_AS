@@ -30,7 +30,8 @@ class ReactionsAdder(DataProcessor):
         reactie_counts = self.df["reactietijd_bucket"].value_counts().sort_index()
         total_count = reactie_counts.sum()
         percentage_counts = reactie_counts / total_count
-        cumulative_percentage = percentage_counts.count()
+        # Bereken de werkelijke cumulatieve som
+        cumulative_percentage = percentage_counts.cumsum()
         return reactie_counts, percentage_counts, cumulative_percentage, total_count
 
     def process_data(self):

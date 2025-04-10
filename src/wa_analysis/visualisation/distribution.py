@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor
@@ -17,9 +18,9 @@ class ReactionPlotter:
         self.data_processor = data_processor
         self.df = data_processor.df
 
-    def create_plot(self, percentage_counts):
+    def create_plot(self, percentage_counts, cumulative_percentage):
         """
-        Maakt de plot
+        Maakt de plot met individuele percentages en subtiele cumulatieve lijn
         """
         # Labels voor de buckets
         bucket_labels = [
@@ -41,7 +42,7 @@ class ReactionPlotter:
         colors = ["#FF9999" if i < 3 else "silver" for i in range(len(bucket_labels))]
 
         # Bar plot voor percentages
-        ax1.bar(bucket_labels, percentage_counts.values, color=colors, width=0.90)
+        ax1.bar(bucket_labels, percentage_counts, color=colors, width=0.90)
         ax1.set_title(
             self.plot_settings.settings.title,
             fontsize=self.plot_settings.settings.title_fontsize,
@@ -51,12 +52,47 @@ class ReactionPlotter:
         ax1.set_xlabel(
             self.plot_settings.settings.xlabel,
             fontsize=self.plot_settings.settings.xlabel_fontsize,
+            fontweight=self.plot_settings.settings.xlabel_fontweight,
         )
         ax1.set_ylabel(
             self.plot_settings.settings.ylabel,
             fontsize=self.plot_settings.settings.ylabel_fontsize,
+            fontweight=self.plot_settings.settings.ylabel_fontweight,
         )
         ax1.tick_params(axis="x", rotation=45)
+
+        # Plot een subtiele cumulatieve lijn op dezelfde y-as
+        # Maak een twinx maar verberg de tweede y-as volledig
+        ax2 = ax1.twinx()
+
+        # Plot de lijn met markers op elk punt
+        ax2.plot(
+            bucket_labels,
+            cumulative_percentage,
+            "o-",
+            color="gray",
+            linewidth=1,
+            markersize=3,
+        )
+        ax2.set_ylim(0, 1.05)  # Op 1.05 omdat het anders niet past
+        ax2.set_ylabel(
+            "Cummulatief",
+            color="gray",
+            fontsize=self.plot_settings.settings.ylabel_fontsize,
+            fontweight=self.plot_settings.settings.ylabel_fontweight,
+        )
+        ax2.tick_params(axis="y", labelcolor="gray", length=0)
+
+        for i, val in enumerate(cumulative_percentage):
+            color = "black" if i == 2 else "gray"
+            ax2.annotate(
+                f"{val:.2f}",
+                (i, val),
+                textcoords="offset points",
+                xytext=(0, 10),
+                ha="center",
+                color=color,
+            )
 
         ax1.yaxis.grid(True)
         ax1.set_axisbelow(True)
@@ -79,6 +115,12 @@ class ReactionPlotter:
         ax1.spines["right"].set_visible(False)
         ax1.spines["left"].set_visible(False)
         ax1.tick_params(axis="both", which="both", length=0)
+
+        # Verberg alle randen van de tweede as
+        ax2.spines["top"].set_visible(False)
+        ax2.spines["right"].set_visible(False)
+        ax2.spines["left"].set_visible(False)
+        ax2.spines["bottom"].set_visible(False)
 
         # Sla de plot op met de geconfigureerde instellingen
         self.plot_settings.save_plot(fig)
@@ -112,7 +154,7 @@ def make_distribution():
 
     # Maak de chart aan met data processor
     chart = ReactionPlotter(settings, reactions_adder)
-    chart.create_plot(percentage_counts)
+    chart.create_plot(percentage_counts, cumulative_percentage)
 
 
 if __name__ == "__main__":
