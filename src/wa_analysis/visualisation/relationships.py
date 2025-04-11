@@ -40,9 +40,7 @@ class Replier:
         """
         Bereid de data voor voor analyse.
         """
-        # Aanname: 'Position' en 'prev_position' kolommen bestaan in het DataFrame
-        # We filteren berichten waar iemand niet op zichzelf heeft gereageerd
-        filtered_df = self.df[self.df["Position"] != self.df["prev_position"]].copy()
+        filtered_df = self.df[self.df["author"] != self.df["prev_author"]].copy()
 
         # Maak een pivot table om het aantal berichten van de ene auteur naar de vorige auteur te tellen
         author_matrix = filtered_df.pivot_table(
@@ -82,26 +80,6 @@ class Replier:
 
         return self
 
-    def create_summary_text(self):
-        """
-        Creëert een samenvatting in tekst van de data.
-        """
-        total_messages = self.overzicht_df["Aantal berichten"].sum()
-        sentence_parts = [
-            f"Gebaseerd op {total_messages:,} berichten, waarbij iemand niet op zichzelf heeft gereageerd.\n"
-        ]
-
-        for position, row in self.overzicht_df.iterrows():
-            sentence_parts.append(
-                f"{position}: {row['Aantal berichten']:,} berichten verzonden door {row['Aantal authors']} auteurs\n"
-            )
-
-        self.summary_text = "".join(sentence_parts)
-        # Vervang komma's door punten voor Nederlandse numerieke notatie
-        self.summary_text = self.summary_text.replace(",", ".")
-
-        return self
-
     def plot_heatmap(self):
         """
         Plot een heatmap van de percentages.
@@ -123,8 +101,18 @@ class Replier:
             self.plot_settings.settings.suptitle, fontsize=16, fontweight="bold"
         )
         plt.title(self.plot_settings.settings.title)
-        plt.xlabel("Beantwoorder", labelpad=20, fontweight="bold", fontsize=12)
-        plt.ylabel("Verzender", labelpad=20, fontweight="bold", fontsize=12)
+        plt.xlabel(
+            self.plot_settings.settings.xlabel,
+            labelpad=20,
+            fontsize=self.plot_settings.settings.xlabel_fontsize,
+            fontweight=self.plot_settings.settings.xlabel_fontweight,
+        )
+        plt.ylabel(
+            self.plot_settings.settings.ylabel,
+            labelpad=20,
+            fontsize=self.plot_settings.settings.ylabel_fontsize,
+            fontweight=self.plot_settings.settings.ylabel_fontweight,
+        )
         plt.xticks(rotation=0)
         plt.yticks(rotation=0)
         plt.gca().xaxis.set_ticks_position("none")
@@ -133,8 +121,8 @@ class Replier:
         # Voeg figtext toe met het overzicht
         plt.figtext(
             0.0,
-            -0.2,
-            self.summary_text,
+            -0.05,
+            self.plot_settings.settings.figtext,
             wrap=True,
             horizontalalignment="left",
             fontsize=10,
@@ -143,16 +131,14 @@ class Replier:
         plt.subplots_adjust(right=0.75)
 
         # Opslaan en eventueel tonen
-        plt.savefig("versie1.png", bbox_inches="tight")
+        self.plot_settings.save_plot(plt.gcf())
         return self
 
 
-def run_replier():
+def make_relationships():
     """
     Hoofdfunctie om de Replier analyse uit te voeren.
     """
-    logger.info("Replier analyse gestart")
-
     # Laad de configuratie en gegevens
     config_loader = ConfigLoader()
     processor = DataProcessor(
@@ -174,11 +160,11 @@ def run_replier():
 
     # Voer de analyse uit en maak de visualisatie
     replier = Replier(settings, processed_df)
-    replier.prepare_data().create_summary_text().plot_heatmap()
-
-    logger.info("Replier analyse voltooid")
+    replier.prepare_data().plot_heatmap()
     return processed_df
 
 
 if __name__ == "__main__":
-    run_replier()
+    logger.info("Relationships analyse gestart")
+    make_relationships()
+    logger.info("Relationships analyse voltooid")

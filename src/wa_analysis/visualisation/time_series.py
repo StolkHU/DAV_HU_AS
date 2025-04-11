@@ -47,7 +47,7 @@ class PhotoPlotter:
         # Kleur selectie
         colors = [
             (
-                "hotpink"
+                "#FF9999"
                 if pd.Period(period, freq="Q") >= pd.Period("2022-Q3", freq="Q")
                 else "silver"
             )
@@ -69,8 +69,8 @@ class PhotoPlotter:
             color="black",
             linewidth=3,
             marker="o",
-            markersize=8,
-            label="Rolling Average (4 quarters)",
+            markersize=7,
+            label="4 Kwartalen Rolling Average",
             zorder=2,
         )
 

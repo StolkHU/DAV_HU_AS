@@ -2,10 +2,10 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from loguru import logger
 
 from wa_analysis.data_analysis.model import TextClustering
 from wa_analysis.data_loading.config import ConfigLoader
-from wa_analysis.data_loading.merger import Merger
 from wa_analysis.data_loading.processor import DataProcessor
 from wa_analysis.data_loading.reactions import ReactionsAdder
 from wa_analysis.settings.settings import PlotSettings
@@ -23,6 +23,8 @@ class Clustering:
         self.custom_palette = self._create_custom_palette()
 
     def _create_corpus(self):
+        self.df = self.df.groupby("author").filter(lambda x: len(x) > 350)
+        logger.info("Cleaning authors with less than 351 messages")
         authors = list(np.unique(self.df.author))
         corpus = {}
         for author in authors:
@@ -34,6 +36,7 @@ class Clustering:
         return corpus
 
     def _create_custom_palette(self):
+        logger.info("Creating a custom palette")
         unique_labels = list(set(self.wa_labels))
         return {
             label: "red" if label == "motley-fox" else "silver"
@@ -41,6 +44,9 @@ class Clustering:
         }
 
     def plot_clustering(self):
+        logger.info("Create the clustering plot")
+        plt.figure(figsize=(12, 8), tight_layout=False)
+
         clustering = TextClustering()
         # Geef de palette expliciet mee aan de TextClustering class
         clustering.custom_palette = self.custom_palette
@@ -51,6 +57,7 @@ class Clustering:
         self._customize_plot()
 
     def _plot(self, xx: np.ndarray, labels: list) -> None:
+        logger.info("Plotting the data in a scatterplot")
         sns.scatterplot(
             x=xx[:, 0],
             y=xx[:, 1],
@@ -61,13 +68,16 @@ class Clustering:
         )
 
     def _customize_plot(self):
+        logger.info("Customizing the plot")
         scatter = plt.gca().collections[0]
         scatter.set_edgecolor("white")
         scatter.set_linewidth(0.5)
+        plt.xticks([])  # Verwijdert de x-as labels als dit in config is ingesteld.
+        plt.yticks([])  # Verwijdert de y-as labels als dit in config is ingesteld.
         rect = patches.Rectangle(
-            (-33, -40),
-            27,
+            (-45, -4),
             20,
+            12,
             linewidth=2,
             edgecolor="silver",
             facecolor="none",
@@ -76,8 +86,8 @@ class Clustering:
         plt.gca().add_patch(rect)
         plt.annotate(
             "Voornamelijk inhoud over het verzamelen",
-            xy=(0, -35),
-            xytext=(-33, -19),
+            xy=(-40, -3),
+            xytext=(-45, 8.5),
             fontsize=9,
             color="silver",
         )
@@ -101,22 +111,17 @@ class Clustering:
             horizontalalignment="left",
             fontsize=10,
         )
-        plt.savefig("clustering.png")
+        self.plot_settings.save_plot(plt.gcf())
 
 
-def run_visualizer():
+def make_clustering():
+
     config_loader = ConfigLoader()
     processor = DataProcessor(
         config=config_loader.config, datafile=config_loader.datafile_hockeyteam
     )
     altered_df = processor.add_columns()
-    merger = Merger(
-        config=config_loader.config,
-        altered_df=altered_df,
-        role_file=config_loader.role_file,
-    )
-    merged_df = merger.get_processed_data()
-    reactions_adder = ReactionsAdder(config_loader.config, merged_df)
+    reactions_adder = ReactionsAdder(config_loader.config, altered_df)
     processed_df = reactions_adder.process_data()
 
     if isinstance(processed_df, tuple):
@@ -124,7 +129,10 @@ def run_visualizer():
 
     visualizer = Clustering(settings, processed_df)
     visualizer.plot_clustering()
+    logger.info("Done creating the clustering plot")
 
 
 if __name__ == "__main__":
-    run_visualizer()
+    logger.info("Clustering analyse gestart")
+    make_clustering()
+    logger.info("Clustering analyse afgerond!")

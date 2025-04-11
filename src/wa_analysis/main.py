@@ -5,9 +5,13 @@ import logging
 import tomllib
 from pathlib import Path
 
+from wa_analysis.visualisation.clustering import make_clustering
 # Import modules
-from staging import dataloader
-from visualising import bar_chart, time_series
+from wa_analysis.visualisation.comparing_categories import \
+    make_comparing_categories
+from wa_analysis.visualisation.distribution import make_distribution
+from wa_analysis.visualisation.relationships import make_relationships
+from wa_analysis.visualisation.time_series import make_timeseries
 
 # Configure logging
 configfile = Path("./config.toml").resolve()
@@ -21,36 +25,42 @@ logging.basicConfig(level=logging.INFO, filename=datafile, filemode="w")
 
 
 def run_project():
-    """
-    This function runs the program in the correct sequence
-    """
+    make_comparing_categories()
+    make_timeseries()
+    make_distribution()
+    make_relationships()
+    make_clustering()
 
-    # Step 1: Load the data
-    try:
-        logging.info("Started data load...")
-        loaded_dataframe = dataloader.load_data()
-        logging.info("Finished data load succesfully!")
-    except Exception:
-        logging.error("Error occured during data load... Please fix!")
+    # """
+    # This function runs the program in the correct sequence
+    # """
 
-    # Step 2: Visualize the bars
-    try:
-        logging.info("Started visualising bar chart...")
-        bar_chart.make_barchart(loaded_dataframe)
-        logging.info("Bar chart created!")
-        print("Bar chart created!")
-    except Exception:
-        logging.error("Error occured during visualising bar chart.. Please fix!")
+    # # Step 1: Load the data
+    # try:
+    #     logging.info("Started data load...")
+    #     loaded_dataframe = dataloader.load_data()
+    #     logging.info("Finished data load succesfully!")
+    # except Exception:
+    #     logging.error("Error occured during data load... Please fix!")
 
-    # Step 3: Visualize the time series chart
-    try:
-        logging.info("Started visualising time series chart...")
-        time_series.make_timeseries()
-        logging.info("Time series chart created!")
-    except Exception:
-        logging.error(
-            "Error occured during visualising time series chart.. Please fix!"
-        )
+    # # Step 2: Visualize the bars
+    # try:
+    #     logging.info("Started visualising bar chart...")
+    #     bar_chart.make_barchart(loaded_dataframe)
+    #     logging.info("Bar chart created!")
+    #     print("Bar chart created!")
+    # except Exception:
+    #     logging.error("Error occured during visualising bar chart.. Please fix!")
+
+    # # Step 3: Visualize the time series chart
+    # try:
+    #     logging.info("Started visualising time series chart...")
+    #     time_series.make_timeseries()
+    #     logging.info("Time series chart created!")
+    # except Exception:
+    #     logging.error(
+    #         "Error occured during visualising time series chart.. Please fix!"
+    #     )
 
 
 if __name__ == "__main__":

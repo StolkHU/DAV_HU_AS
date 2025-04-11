@@ -37,8 +37,6 @@ class BaseDataLoader:
             raise ValueError(
                 "Unsupported file format. Only CSV, Parquet and JSON are supported."
             )
-
-        print(df.head())
         return df
 
 
