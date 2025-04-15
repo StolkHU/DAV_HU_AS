@@ -1,7 +1,6 @@
 import logging
 import tomllib
 from pathlib import Path
-from typing import Optional
 
 
 class Logger:
