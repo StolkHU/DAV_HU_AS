@@ -93,7 +93,9 @@ class Replier:
             self.author_matrix_percentages,
             annot=True,
             fmt=".3f",
-            cmap="PuBu",
+            cmap=sns.light_palette(
+                "#FF9999", as_cmap=True
+            ),  # eigen custom palette om de "huisstijl" te behouden...
             linewidths=0.5,
             cbar=False,
         )

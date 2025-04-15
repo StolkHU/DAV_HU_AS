@@ -1,10 +1,12 @@
 ### Code for running the project ###
 
 # Import packages
-import logging
-import tomllib
-from pathlib import Path
+import sys
+import traceback
+from datetime import datetime
 
+# Import de logger klasse die we al hebben gemaakt
+from wa_analysis.settings.logger import Logger
 from wa_analysis.visualisation.clustering import make_clustering
 # Import modules
 from wa_analysis.visualisation.comparing_categories import \
@@ -13,55 +15,96 @@ from wa_analysis.visualisation.distribution import make_distribution
 from wa_analysis.visualisation.relationships import make_relationships
 from wa_analysis.visualisation.time_series import make_timeseries
 
-# Configure logging
-configfile = Path("./config.toml").resolve()
-with configfile.open("rb") as f:
-    config = tomllib.load(f)
-root = Path("./").resolve()
-logfolder = root / Path(config["logging"])
-datafile = logfolder / config["log_file"]
 
-logging.basicConfig(level=logging.INFO, filename=datafile, filemode="w")
+def setup_logging():
+    """
+    Configureer logging voor het project.
+    Gebruikt de bestaande Logger klasse.
+
+    Returns:
+        logger: Geconfigureerde logger
+    """
+    # Gebruik de bestaande Logger klasse
+    logger_instance = Logger()
+    return logger_instance.get_logger()
+
+
+def run_visualization(name, func, logger):
+    """
+    Voer een visualisatiefunctie uit met foutafhandeling.
+
+    Args:
+        name: Naam van de visualisatie
+        func: Functie die de visualisatie maakt
+        logger: Logger voor log berichten
+
+    Returns:
+        Success status (True/False)
+    """
+    logger.info(f"Start visualisatie: {name}")
+    start_time = datetime.now()
+
+    try:
+        # Voer de visualisatiefunctie uit
+        func()
+
+        elapsed = datetime.now() - start_time
+        logger.info(
+            f"Visualisatie {name} voltooid in {elapsed.total_seconds():.2f} seconden"
+        )
+        return True
+
+    except Exception as e:
+        elapsed = datetime.now() - start_time
+        logger.error(
+            f"Fout in visualisatie {name} na {elapsed.total_seconds():.2f} seconden: {e}"
+        )
+        logger.error(traceback.format_exc())
+        return False
 
 
 def run_project():
-    make_comparing_categories()
-    make_timeseries()
-    make_distribution()
-    make_relationships()
-    make_clustering()
+    """
+    Voer het volledige project uit.
+    """
+    # Setup logging
+    logger = setup_logging()
+    logger.info("Start WhatsApp Analyse project")
 
-    # """
-    # This function runs the program in the correct sequence
-    # """
+    # Maak een lijst van alle visualisaties
+    visualizations = [
+        ("comparing_categories", make_comparing_categories),
+        ("timeseries", make_timeseries),
+        ("distribution", make_distribution),
+        ("relationships", make_relationships),
+        ("clustering", make_clustering),
+    ]
 
-    # # Step 1: Load the data
-    # try:
-    #     logging.info("Started data load...")
-    #     loaded_dataframe = dataloader.load_data()
-    #     logging.info("Finished data load succesfully!")
-    # except Exception:
-    #     logging.error("Error occured during data load... Please fix!")
+    # Houd bij welke visualisaties succesvol waren
+    success_count = 0
 
-    # # Step 2: Visualize the bars
-    # try:
-    #     logging.info("Started visualising bar chart...")
-    #     bar_chart.make_barchart(loaded_dataframe)
-    #     logging.info("Bar chart created!")
-    #     print("Bar chart created!")
-    # except Exception:
-    #     logging.error("Error occured during visualising bar chart.. Please fix!")
+    # Voer elke visualisatie uit met foutafhandeling
+    for name, func in visualizations:
+        if run_visualization(name, func, logger):
+            success_count += 1
 
-    # # Step 3: Visualize the time series chart
-    # try:
-    #     logging.info("Started visualising time series chart...")
-    #     time_series.make_timeseries()
-    #     logging.info("Time series chart created!")
-    # except Exception:
-    #     logging.error(
-    #         "Error occured during visualising time series chart.. Please fix!"
-    #     )
+    # Rapporteer eindresultaat
+    total = len(visualizations)
+    logger.info(
+        f"Project voltooid: {success_count}/{total} visualisaties succesvol gemaakt"
+    )
+
+    if success_count < total:
+        logger.warning(
+            "Niet alle visualisaties konden worden gemaakt. Zie bovenstaande fouten."
+        )
+
+    return success_count == total
 
 
 if __name__ == "__main__":
-    run_project()
+    # Voer het project uit
+    success = run_project()
+
+    # Stel juiste exit code in
+    sys.exit(0 if success else 1)

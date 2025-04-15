@@ -90,9 +90,6 @@ class PhotoPlotter:
         # Pas plot-instellingen toe
         self.plot_settings.apply_settings(ax)
 
-        # Tight layout voor de figtext
-        # plt.tight_layout()
-
         ax.set_xticks(range(len(photos_percentage_per_quarter.index)))
         ax.set_xticklabels(
             [
@@ -105,7 +102,6 @@ class PhotoPlotter:
 
         # plt.subplots_adjust(bottom=0.2)  # Extra ruimte onderaan voor figtext
 
-        # Extra tekstuele annotaties
         plt.figtext(
             self.plot_settings.settings.figtext_x,
             self.plot_settings.settings.figtext_y,
