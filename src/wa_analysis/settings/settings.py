@@ -7,6 +7,11 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
+from wa_analysis.settings.logger import Logger
+
+# Setup logger
+logger = Logger().get_logger()
+
 
 @dataclass
 class Settings:
@@ -41,47 +46,67 @@ class Settings:
 
 class PlotSettings:
     def __init__(self, section: str):
+        logger.info(f"Initialiseren PlotSettings voor sectie: {section}")
         self.config: dict = {}
         self.settings: Settings = self.load_settings(section)
+        logger.debug(f"PlotSettings geladen voor sectie: {section}")
 
     def set_config(self):
         """
         Laad configuratie uit config.toml met foutafhandeling
         """
+        logger.info("Laden configuratie uit config.toml")
         configfile = Path("config.toml").resolve()
+        logger.debug(f"Configuratiepad: {configfile}")
 
         # Controleer of het configuratiebestand bestaat
         if not configfile.exists():
-            raise FileNotFoundError(f"Configuratiebestand niet gevonden: {configfile}")
+            error_msg = f"Configuratiebestand niet gevonden: {configfile}"
+            logger.error(error_msg)
+            raise FileNotFoundError(error_msg)
 
         try:
             with configfile.open("rb") as f:
                 self.config = tomllib.load(f)
+                logger.debug(f"Configuratie geladen met {len(self.config)} secties")
+                return self.config
         except Exception as e:
-            raise RuntimeError(f"Fout bij het laden van configuratie: {e}")
+            error_msg = f"Fout bij het laden van configuratie: {e}"
+            logger.error(error_msg)
+            raise RuntimeError(error_msg)
 
     def load_settings(self, section: str) -> Settings:
         """
         Laad visuele instellingen voor een specifieke sectie
         """
+        logger.info(f"Laden instellingen voor sectie: {section}")
+
         # Laad configuratie als dit nog niet is gebeurd
         if not self.config:
             self.set_config()
 
         # Controleer of de sectie bestaat
         if section not in self.config:
-            raise KeyError(f"Sectie '{section}' niet gevonden in configuratie")
+            error_msg = f"Sectie '{section}' niet gevonden in configuratie"
+            logger.error(error_msg)
+            raise KeyError(error_msg)
 
         config_visual = self.config[section]
+        logger.debug(
+            f"Visuele configuratie gevonden met {len(config_visual)} instellingen"
+        )
 
         # Controleer of output_folder is gedefinieerd
         output_folder = self.config.get("output_folder")
         if output_folder:
             output_folder = Path(output_folder)
+            logger.debug(f"Output folder: {output_folder}")
             # Maak de output folder aan als deze niet bestaat
             output_folder.mkdir(parents=True, exist_ok=True)
+            logger.debug(f"Output folder aangemaakt/gecontroleerd: {output_folder}")
 
-        return Settings(
+        # Maak Settings object
+        settings = Settings(
             suptitle=config_visual.get("suptitle"),
             suptitle_fontsize=config_visual.get("suptitle_fontsize"),
             suptitle_fontweight=config_visual.get("suptitle_fontweight"),
@@ -111,50 +136,74 @@ class PlotSettings:
             subplot_adjust_bottom=config_visual.get("subplot_adjust_bottom"),
         )
 
+        logger.info(f"Instellingen voor sectie '{section}' succesvol geladen")
+        return settings
+
     def apply_settings(self, ax, suptitle: Optional[str] = None):
         """
         Pas instellingen toe op de gegeven axes
         """
-        # Titel instellen
-        ax.set_title(
-            self.settings.title,
-            fontsize=self.settings.title_fontsize,
-            fontstyle=self.settings.title_fontstyle or "normal",
-        )
+        logger.info("Toepassen instellingen op axes")
 
-        # X-as labels
-        ax.set_xlabel(
-            self.settings.xlabel,
-            fontsize=self.settings.xlabel_fontsize,
-            fontweight=self.settings.xlabel_fontweight,
-        )
-
-        # Y-as labels
-        ax.set_ylabel(
-            self.settings.ylabel,
-            fontsize=self.settings.ylabel_fontsize,
-            fontweight=self.settings.ylabel_fontweight,
-        )
-
-        # As uitzetten indien gewenst
-        if self.settings.axis_off:
-            ax.set_axis_off()
-
-        # Grid toevoegen indien gewenst
-        if self.settings.grid_on:
-            ax.grid(True)
-
-        # Legenda toevoegen indien gewenst
-        if self.settings.legend_on:
-            ax.legend()
-
-        # Suptitle toevoegen
-        if suptitle or self.settings.suptitle:
-            ax.figure.suptitle(
-                suptitle or self.settings.suptitle,
-                fontsize=self.settings.suptitle_fontsize,
-                fontweight=self.settings.suptitle_fontweight or "normal",
+        try:
+            # Titel instellen
+            ax.set_title(
+                self.settings.title,
+                fontsize=self.settings.title_fontsize,
+                fontstyle=self.settings.title_fontstyle or "normal",
             )
+            logger.debug(f"Titel ingesteld: {self.settings.title}")
+
+            # X-as labels
+            ax.set_xlabel(
+                self.settings.xlabel,
+                fontsize=self.settings.xlabel_fontsize,
+                fontweight=self.settings.xlabel_fontweight,
+            )
+            logger.debug(f"X-label ingesteld: {self.settings.xlabel}")
+
+            # Y-as labels
+            ax.set_ylabel(
+                self.settings.ylabel,
+                fontsize=self.settings.ylabel_fontsize,
+                fontweight=self.settings.ylabel_fontweight,
+            )
+            logger.debug(f"Y-label ingesteld: {self.settings.ylabel}")
+
+            # As uitzetten indien gewenst
+            if self.settings.axis_off:
+                ax.set_axis_off()
+                logger.debug("Assen uitgezet")
+
+            # Grid toevoegen indien gewenst
+            if self.settings.grid_on:
+                ax.grid(True)
+                logger.debug("Grid ingeschakeld")
+
+            # Legenda toevoegen indien gewenst
+            if self.settings.legend_on and len(ax.get_legend_handles_labels()[0]) > 0:
+                ax.legend()
+                logger.debug("Legenda toegevoegd")
+            else:
+                logger.debug(
+                    "Geen legenda toegevoegd (geen gelabelde elementen of legend_on=False)"
+                )
+
+            # Suptitle toevoegen
+            if suptitle or self.settings.suptitle:
+                title_text = suptitle or self.settings.suptitle
+                ax.figure.suptitle(
+                    title_text,
+                    fontsize=self.settings.suptitle_fontsize,
+                    fontweight=self.settings.suptitle_fontweight or "normal",
+                )
+                logger.debug(f"Suptitle ingesteld: {title_text}")
+
+            logger.info("Instellingen succesvol toegepast op axes")
+
+        except Exception as e:
+            logger.error(f"Fout bij het toepassen van instellingen: {str(e)}")
+            raise
 
     def save_plot(self, fig, filename: Optional[str] = None):
         """
@@ -163,23 +212,37 @@ class PlotSettings:
         :param fig: Matplotlib figure object
         :param filename: Optionele bestandsnaam die de configuratie kan overschrijven
         """
-        # Gebruik de opgegeven filename of de naam uit configuratie
-        save_filename = filename or self.settings.save_as
+        logger.info("Opslaan plot")
 
-        # Zorg dat de output folder bestaat
-        if self.settings.output_folder:
-            save_path = self.settings.output_folder / save_filename
-        else:
-            save_path = Path(save_filename)
+        try:
+            # Gebruik de opgegeven filename of de naam uit configuratie
+            save_filename = filename or self.settings.save_as
+            logger.debug(f"Bestandsnaam voor opslaan: {save_filename}")
 
-        # Maak de directory aan indien nodig
-        save_path.parent.mkdir(parents=True, exist_ok=True)
+            # Zorg dat de output folder bestaat
+            if self.settings.output_folder:
+                save_path = self.settings.output_folder / save_filename
+                logger.debug(f"Volledig pad voor opslaan: {save_path}")
+            else:
+                save_path = Path(save_filename)
+                logger.debug(f"Relatief pad voor opslaan: {save_path}")
 
-        # Sla de figuur op
-        fig.savefig(save_path, bbox_inches="tight")
-        print(
-            f"Plot opgeslagen als: {save_filename} in de map {self.settings.output_folder}"
-        )
+            # Maak de directory aan indien nodig
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            logger.debug(f"Directory gecontroleerd: {save_path.parent}")
+
+            # Sla de figuur op
+            fig.savefig(save_path, bbox_inches="tight")
+            logger.info(
+                f"Plot opgeslagen als: {save_filename} in de map {self.settings.output_folder}"
+            )
+            print(
+                f"Plot opgeslagen als: {save_filename} in de map {self.settings.output_folder}"
+            )
+
+        except Exception as e:
+            logger.error(f"Fout bij het opslaan van de plot: {str(e)}")
+            raise
 
 
 class MessageCalculations(BaseModel):
