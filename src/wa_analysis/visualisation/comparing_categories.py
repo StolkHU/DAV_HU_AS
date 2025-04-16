@@ -51,8 +51,10 @@ class HockeyBarChart:
             sns.barplot(
                 x=average_message_length[self.hockeybar_settings.function_column],
                 y=average_message_length[self.hockeybar_settings.message_length_column],
+                hue=average_message_length[self.hockeybar_settings.function_column],
                 palette=["#FF9999", "silver"],
                 ax=ax,
+                legend=False,
             )
             logger.debug("Barplot gecreëerd")
 
