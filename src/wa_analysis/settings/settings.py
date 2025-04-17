@@ -196,6 +196,7 @@ class PlotSettings:
                     title_text,
                     fontsize=self.settings.suptitle_fontsize,
                     fontweight=self.settings.suptitle_fontweight or "normal",
+                    y=0.94,
                 )
                 logger.debug(f"Suptitle ingesteld: {title_text}")
 
@@ -248,6 +249,8 @@ class PlotSettings:
 class MessageCalculations(BaseModel):
     """Settings for message calculations."""
 
-    function_column: str = "Function"
+    function_column: str = (
+        "Position"  # aanpasbaar naar andere kolom (zoals Function om de grafiek per functie te zien.)
+    )
     message_column: str = "message"
     message_length_column: str = "message_length"

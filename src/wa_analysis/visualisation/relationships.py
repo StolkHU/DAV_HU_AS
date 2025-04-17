@@ -100,9 +100,19 @@ class Replier:
             cbar=False,
         )
         plt.suptitle(
-            self.plot_settings.settings.suptitle, fontsize=16, fontweight="bold"
+            self.plot_settings.settings.suptitle,
+            fontsize=self.plot_settings.settings.suptitle_fontsize,
+            fontweight=self.plot_settings.settings.suptitle_fontweight,
+            horizontalalignment="center",
+            x=0.35,
         )
-        plt.title(self.plot_settings.settings.title)
+        plt.title(
+            self.plot_settings.settings.title,
+            fontsize=self.plot_settings.settings.title_fontsize,
+            fontstyle=self.plot_settings.settings.title_fontstyle,
+            horizontalalignment="center",
+            x=0.35,
+        )
         plt.xlabel(
             self.plot_settings.settings.xlabel,
             labelpad=20,

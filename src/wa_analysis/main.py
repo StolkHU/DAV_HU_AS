@@ -5,10 +5,9 @@ import sys
 import traceback
 from datetime import datetime
 
-# Import de logger klasse die we al hebben gemaakt
+# Import modules
 from wa_analysis.settings.logger import Logger
 from wa_analysis.visualisation.clustering import make_clustering
-# Import modules
 from wa_analysis.visualisation.comparing_categories import \
     make_comparing_categories
 from wa_analysis.visualisation.distribution import make_distribution

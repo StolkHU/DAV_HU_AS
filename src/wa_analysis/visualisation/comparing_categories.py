@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.merger import Merger
@@ -40,29 +39,47 @@ class HockeyBarChart:
         return average_message_length
 
     def plot_average_message_length(self, average_message_length):
-        """Create a bar plot of average message length."""
+        """Create a bar plot of average message length with specific colors per category."""
         logger.info("Maken van barplot voor gemiddelde berichtlengte")
 
         try:
             fig, ax = plt.subplots(figsize=(10, 8))
             logger.debug("Figuur en axes aangemaakt")
 
-            # Plot met seaborn
-            sns.barplot(
-                x=average_message_length[self.hockeybar_settings.function_column],
-                y=average_message_length[self.hockeybar_settings.message_length_column],
-                hue=average_message_length[self.hockeybar_settings.function_column],
-                palette=["#FF9999", "silver"],
-                ax=ax,
-                legend=False,
+            # Definieer kleuren per categorie
+            category_colors = {}
+            for category in average_message_length[
+                self.hockeybar_settings.function_column
+            ]:
+                if category.lower() == "staff":
+                    category_colors[category] = "#FF9999"  # Rood voor staff
+                else:
+                    category_colors[category] = (
+                        "silver"  # Zilver voor andere categorieën
+                    )
+
+            # Maak een lijst van kleuren in dezelfde volgorde als de data
+            color_list = [
+                category_colors[cat]
+                for cat in average_message_length[
+                    self.hockeybar_settings.function_column
+                ]
+            ]
+
+            # Plot met matplotlib voor betere controle over kleuren per bar
+            bars = ax.bar(
+                average_message_length[self.hockeybar_settings.function_column],
+                average_message_length[self.hockeybar_settings.message_length_column],
+                color=color_list,
             )
             logger.debug("Barplot gecreëerd")
 
             # Datalabels toevoegen aan de bars
-            for p in ax.patches:
+            for bar in bars:
+                height = bar.get_height()
                 ax.annotate(
-                    f"{p.get_height():.1f}",
-                    (p.get_x() + p.get_width() / 2.0, p.get_height()),
+                    f"{height:.1f}",
+                    xy=(bar.get_x() + bar.get_width() / 2, height),
                     ha="center",
                     va="center",
                     xytext=(0, -10),
