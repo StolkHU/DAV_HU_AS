@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor
@@ -44,16 +45,11 @@ class ReactionPlotter:
             logger.debug(f"Bucket labels: {bucket_labels}")
 
             # Opbouw van de figuur
-            fig, ax1 = plt.subplots(figsize=(10, 6))
+            fig, ax1 = plt.subplots(figsize=(10, 7))
             logger.debug("Figuur en primaire as aangemaakt")
 
-            # Kleuren
-            colors = [
-                "#FF9999" if i < 3 else "silver" for i in range(len(bucket_labels))
-            ]
-
-            # Bar plot voor percentages
-            ax1.bar(bucket_labels, percentage_counts, color=colors, width=0.90)
+            # Bar plot voor waarschijnlijkheid
+            ax1.bar(bucket_labels, percentage_counts, color="silver", width=0.90)
             logger.debug("Barplot voor percentages aangemaakt")
 
             ax1.set_title(
@@ -75,42 +71,51 @@ class ReactionPlotter:
             ax1.tick_params(axis="x", rotation=45)
             logger.debug("Titel en labels ingesteld")
 
-            # Plot een subtiele cumulatieve lijn op dezelfde y-as
-            # Maak een twinx maar verberg de tweede y-as volledig
             ax2 = ax1.twinx()
             logger.debug("Secundaire as aangemaakt voor cumulatieve lijn")
 
-            # Plot de lijn met markers op elk punt
-            ax2.plot(
+            # Plot de lijn met markers op elk punt en voeg een label toe voor de legenda
+            (line,) = ax2.plot(
                 bucket_labels,
                 cumulative_percentage,
                 "o-",
-                color="gray",
-                linewidth=1,
+                color="black",
+                linewidth=2,
                 markersize=3,
+                label="Cumulatief",  # Label toevoegen voor de legenda
             )
+
             ax2.set_ylim(0, 1.05)  # Op 1.05 omdat het anders niet past
-            # ax2.set_ylabel(
-            #     "Cummulatief",
-            #     color="gray",
-            #     fontsize=self.plot_settings.settings.ylabel_fontsize,
-            #     fontweight=self.plot_settings.settings.ylabel_fontweight,
-            # )
             ax2.set_yticklabels([])
-            ax2.tick_params(axis="y", labelcolor="gray", length=0)
+            ax2.tick_params(axis="y", labelcolor="black", length=0)
             logger.debug("Cumulatieve lijn geplot")
+
+            # Voeg een legenda toe voor de lijn
+            ax2.legend(handles=[line], loc="upper left", bbox_to_anchor=(0, 1.03))
+            logger.debug("Legenda toegevoegd voor cumulatieve lijn")
 
             # Annotaties toevoegen
             for i, val in enumerate(cumulative_percentage):
-                color = "black" if i == 2 else "gray"
-                ax2.annotate(
-                    f"{val:.2f}",
-                    (i, val),
-                    textcoords="offset points",
-                    xytext=(0, 10),
-                    ha="center",
-                    color=color,
-                )
+                # Maak de tekst voor de derde marker dikgedrukt
+                if i == 2:
+                    ax2.annotate(
+                        f"{val:.2f}",
+                        (i, val),
+                        textcoords="offset points",
+                        xytext=(0, 10),
+                        ha="center",
+                        color="black",
+                        fontweight="bold",
+                    )
+                else:
+                    ax2.annotate(
+                        f"{val:.2f}",
+                        (i, val),
+                        textcoords="offset points",
+                        xytext=(0, 10),
+                        ha="center",
+                        color="black",
+                    )
             logger.debug("Annotaties toegevoegd aan cumulatieve lijn")
 
             # Verdere opmaak
@@ -175,7 +180,6 @@ def make_distribution():
         logger.info("DataProcessor geïnitialiseerd")
 
         # Voeg kolommen toe
-        # Let op: add_columns() retourneert de DataFrame
         altered_dataframe = data_processor.add_columns()
         logger.info("Kolommen toegevoegd aan dataframe")
 

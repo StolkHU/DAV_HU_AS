@@ -74,7 +74,7 @@ class PhotoPlotter:
             zorder=2,
         )
 
-        ax.legend(fontsize=12)
+        ax.legend(fontsize=14)
 
         # Datalabels toevoegen aan de bars
         for p in ax.patches:
@@ -100,7 +100,43 @@ class PhotoPlotter:
             fontsize=self.plot_settings.settings.xlabel_fontsize,
         )
 
-        # plt.subplots_adjust(bottom=0.2)  # Extra ruimte onderaan voor figtext
+        # Zoek index van 2022 Q4 voor annotatie
+        target_quarter = pd.Period("2022-Q4", freq="Q")
+
+        # Vind de index van 2022 Q4 in de data
+        q4_2022_idx = None
+        q4_2022_value = None
+        for i, period in enumerate(photos_percentage_per_quarter.index):
+            if pd.Period(period, freq="Q") == target_quarter:
+                q4_2022_idx = i
+                q4_2022_value = photos_percentage_per_quarter.iloc[i]
+                break
+
+        # Als 2022 Q4 is gevonden, voeg annotatie toe
+        if q4_2022_idx is not None:
+            # Bepaal de maximale hoogte voor de plot
+            y_max = ax.get_ylim()[1]
+
+            # Voeg annotatie toe voor de gebeurtenis, pijl wijst naar de balk
+            ax.annotate(
+                "Geboorte dochter\n(Nov 2022)",
+                xy=(q4_2022_idx, q4_2022_value * 1.08),  # Positie van de balk
+                xytext=(q4_2022_idx - 1.5, y_max * 0.9),  # Tekst links van de balk
+                ha="center",
+                va="center",
+                fontsize=12,
+                fontweight="bold",
+                color="#AA3333",
+                bbox=dict(
+                    boxstyle="round,pad=0.5", fc="white", ec="#AA3333", alpha=0.7
+                ),
+                arrowprops=dict(
+                    arrowstyle="->",
+                    connectionstyle="arc3,rad=-0.4",
+                    color="#AA3333",
+                    lw=2,
+                ),
+            )
 
         plt.figtext(
             self.plot_settings.settings.figtext_x,
