@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor

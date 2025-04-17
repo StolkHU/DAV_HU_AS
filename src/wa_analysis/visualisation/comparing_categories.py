@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.merger import Merger
