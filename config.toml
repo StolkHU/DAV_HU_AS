@@ -18,7 +18,6 @@ mymodule = "module.main:main"
 name = "module"
 
 [comparing_categories]
-figsize = [10, 8]
 suptitle = "Kort maar krachtig: De communicatiekloof tussen veld en zijlijn"
 suptitle_fontsize = 16
 suptitle_fontweight = "bold"
@@ -48,7 +47,6 @@ legend_title = ""
 
 
 [time_series]
-figsize = [20, 15]
 suptitle = "Photoboom"
 suptitle_fontsize = 22
 suptitle_fontweight = "bold"
@@ -76,7 +74,6 @@ legend_title = ""
 
 
 [distribution]
-figsize = [10, 6]
 suptitle = "Liefde op het eerste bericht"
 suptitle_fontsize = 18
 suptitle_fontweight = "bold"
@@ -103,7 +100,6 @@ legend_on = "False"
 legend_title = ""
 
 [relationships]
-figsize = [10, 6]
 suptitle = "Ook in de groepschat zetten de verdedigers de lijnen uit"
 suptitle_fontsize = 18
 suptitle_fontweight = "bold"
