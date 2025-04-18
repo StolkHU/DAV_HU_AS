@@ -1,9 +1,8 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import pandas as pd
 
-from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor
 from wa_analysis.settings.logger import Logger
 

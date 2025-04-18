@@ -1,9 +1,8 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from matplotlib.figure import Figure
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.merger import Merger

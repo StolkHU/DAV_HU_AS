@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd

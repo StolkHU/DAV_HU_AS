@@ -1,7 +1,6 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Dict, List
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from wa_analysis.data_loading.config import ConfigLoader

@@ -1,4 +1,4 @@
-from typing import Any, Optional, Tuple
+from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes

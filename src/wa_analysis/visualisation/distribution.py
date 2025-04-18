@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd

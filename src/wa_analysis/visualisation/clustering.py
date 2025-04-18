@@ -1,16 +1,14 @@
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Dict, List
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib.figure import Figure
 
 from wa_analysis.data_analysis.model import TextClustering
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor
-from wa_analysis.data_loading.reactions import ReactionsAdder
 from wa_analysis.settings.logger import Logger
 from wa_analysis.settings.settings import PlotSettings
 
