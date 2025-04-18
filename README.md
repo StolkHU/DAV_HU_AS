@@ -43,7 +43,7 @@ DAV_HU_AS/
 └── src/                                  # Broncode
     └── wa_analysis/                      # WhatsApp analyse modules
         ├── data_analysis/                # Modules voor het laden en verwerken van data
-        │   ├── model.py                  # Module om de textclustering te analyseren
+        │   └── model.py                  # Module om de textclustering te analyseren
         │
         ├── data_loading/                 # Modules voor het laden en verwerken van data
         │   ├── config.py                 # Configuratielader
@@ -89,14 +89,24 @@ DAV_HU_AS/
    venv\Scripts\activate     # Windows
    ```
 
-3. Installeer de benodigde packages met uv:
+3. Installeer pip-tools en uv (indien nog niet beschikbaar):
    ```bash
-   uv install
+   pip install pip-tools uv
    ```
 
-   Als u geen uv heeft, kunt u het installeren via:
+4. Installeer de benodigde packages met uv:
    ```bash
-   pip install uv
+   uv pip install -r requirements.txt
+   ```
+   
+   Of gebruik pip als alternatief:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. Maak de nodige mappen aan als deze nog niet bestaan:
+   ```bash
+   mkdir -p data/raw data/processed logs/code img
    ```
 
 ## 🔍 Gegevensvoorbereiding
@@ -124,6 +134,13 @@ DAV_HU_AS/
 
 ### Alle visualisaties in één keer genereren
 
+Zorg ervoor dat uw virtuele omgeving is geactiveerd:
+```bash
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+```
+
+Voer vervolgens uit:
 ```bash
 python main.py
 ```
@@ -231,12 +248,52 @@ plot = ColoredBarPlot(settings.settings)
 ## 📊 Visualisatie-voorbeelden
 
 ### Vergelijking van categorieën
-![Example](img/Comparing%20Categories_v1.png)
+![Example](img/Comparing%20Categories.png)
 *Deze visualisatie toont dat stafleden gemiddeld veel langere berichten sturen dan spelers. Dit suggereert dat stafleden vaak meer gedetailleerde informatie moeten overbrengen.*
 
 ### Tijdreeksanalyse 
-![Example](img/Time%20Series_v1.png)
+![Example](img/Time%20Series.png)
 *Deze visualisatie toont een duidelijke toename in het delen van foto's na de geboorte van een kind in november 2022. Het percentage foto's steeg van gemiddeld 5% naar bijna 15% in de kwartalen na de geboorte.*
+
+## 🔧 Probleemoplossing
+
+### Veelvoorkomende problemen
+
+1. **Importfouten:** Als u importfouten krijgt, controleer dan of u de virtuele omgeving correct heeft geactiveerd en of u het project uitvoert vanuit de hoofdmap.
+
+   ```bash
+   cd /pad/naar/DAV_HU_AS
+   source venv/bin/activate  # of venv\Scripts\activate op Windows
+   ```
+
+2. **Ontbrekende mappen:** Als u fouten krijgt over ontbrekende mappen, maak deze dan handmatig aan:
+
+   ```bash
+   mkdir -p data/raw data/processed logs/code img
+   ```
+
+3. **Plotweergaveproblemen:** Als u problemen heeft met het weergeven van plots, probeer dan:
+
+   ```python
+   import matplotlib
+   matplotlib.use('Agg')  # Voor omgevingen zonder GUI
+   ```
+
+### Pakketconflicten
+
+Als u pakketconflicten tegenkomt, is het aanbevolen om een schone virtuele omgeving te maken:
+
+```bash
+# Verwijder oude venv
+rm -rf venv  # Linux/macOS
+rmdir /s /q venv  # Windows
+
+# Maak nieuwe venv
+python -m venv venv
+source venv/bin/activate  # of venv\Scripts\activate op Windows
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
 ## 📈 Prestaties en optimalisaties
 

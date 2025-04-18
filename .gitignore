@@ -10,7 +10,6 @@ data/raw/*.parq
 data/processed/*.csv
 data/processed/*.parq
 data/raw/*.json
-*.log
 *.pptx
 .DS_Store
 *.egg-info
@@ -18,4 +17,4 @@ data/raw/*.json
 .lycheecache
 .notebookcache
 **/personal.ipynb
-config.toml
+.notebooks

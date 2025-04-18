@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Any, Optional, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from matplotlib.figure import Figure
 
 from wa_analysis.settings.baseplot import BasePlot
 from wa_analysis.settings.logger import Logger
@@ -18,10 +19,10 @@ class ColoredBarPlot(BasePlot):
     def __init__(self, settings: ColoredPlotSettings):
         logger.info("Initialiseren ColoredBarPlot")
         super().__init__(settings)
-        self.rotation = 0
+        self.rotation: int = 0
         logger.debug("ColoredBarPlot geïnitialiseerd")
 
-    def set_rotation(self, rotation: int):
+    def set_rotation(self, rotation: int) -> "ColoredBarPlot":
         """Set the rotation for x-axis labels."""
         logger.info(f"Instellen rotatie x-labels op {rotation} graden")
         self.rotation = rotation
@@ -33,7 +34,7 @@ class ColoredBarPlot(BasePlot):
         x_column: str,
         y_column: str,
         hue_column: Optional[str] = None,
-    ):
+    ) -> Figure:
         """Create a bar plot using the provided data and settings."""
         logger.info(f"Maken barplot met x={x_column}, y={y_column}, hue={hue_column}")
 
@@ -46,7 +47,9 @@ class ColoredBarPlot(BasePlot):
                 self.create_figure()
 
             # Bepaal de te gebruiken kleurenpalet
-            palette = getattr(self.settings, "color_palette", None)
+            palette: Optional[Union[str, list]] = getattr(
+                self.settings, "color_palette", None
+            )
             logger.debug(f"Kleurenpalet: {palette}")
 
             # Maak barplot

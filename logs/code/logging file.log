@@ -1,0 +1,189 @@
+2025-04-18 10:33:31,373 - whatsapp_analysis - INFO - Logger initialized. Log file: /home/azureuser/DAV_HU_AS/logs/code/logging file.log
+2025-04-18 10:33:31,720 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: clustering
+2025-04-18 10:33:31,720 - whatsapp_analysis - INFO - Laden instellingen voor sectie: clustering
+2025-04-18 10:33:31,721 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:31,728 - whatsapp_analysis - INFO - Instellingen voor sectie 'clustering' succesvol geladen
+2025-04-18 10:33:31,821 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: comparing_categories
+2025-04-18 10:33:31,821 - whatsapp_analysis - INFO - Laden instellingen voor sectie: comparing_categories
+2025-04-18 10:33:31,821 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:31,823 - whatsapp_analysis - INFO - Instellingen voor sectie 'comparing_categories' succesvol geladen
+2025-04-18 10:33:31,833 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: distribution
+2025-04-18 10:33:31,833 - whatsapp_analysis - INFO - Laden instellingen voor sectie: distribution
+2025-04-18 10:33:31,833 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:31,834 - whatsapp_analysis - INFO - Instellingen voor sectie 'distribution' succesvol geladen
+2025-04-18 10:33:31,842 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: relationships
+2025-04-18 10:33:31,842 - whatsapp_analysis - INFO - Laden instellingen voor sectie: relationships
+2025-04-18 10:33:31,842 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:31,844 - whatsapp_analysis - INFO - Instellingen voor sectie 'relationships' succesvol geladen
+2025-04-18 10:33:31,852 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: time_series
+2025-04-18 10:33:31,852 - whatsapp_analysis - INFO - Laden instellingen voor sectie: time_series
+2025-04-18 10:33:31,852 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:31,853 - whatsapp_analysis - INFO - Instellingen voor sectie 'time_series' succesvol geladen
+2025-04-18 10:33:31,853 - whatsapp_analysis - INFO - Start WhatsApp Analyse project
+2025-04-18 10:33:31,853 - whatsapp_analysis - INFO - Start visualisatie: comparing_categories
+2025-04-18 10:33:31,854 - whatsapp_analysis - INFO - Start maken van vergelijkende categorieëngrafiek
+2025-04-18 10:33:31,854 - whatsapp_analysis - INFO - Initialiseren van ConfigLoader
+2025-04-18 10:33:31,854 - whatsapp_analysis - INFO - Laden van configuratie uit: /home/azureuser/DAV_HU_AS/config.toml
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - ConfigLoader succesvol geïnitialiseerd
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - Configuratie geladen
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - Initialiseren DataProcessor voor bestand: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - Initializing BaseDataLoader with datafile: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - Loading data from file: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:31,861 - whatsapp_analysis - INFO - Loading data from /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq with extension .parq
+2025-04-18 10:33:31,935 - whatsapp_analysis - INFO - Successfully loaded dataframe with shape: (11442, 10)
+2025-04-18 10:33:31,936 - whatsapp_analysis - INFO - Kopie maken van DataFrame met vorm: (11442, 10)
+2025-04-18 10:33:31,937 - whatsapp_analysis - INFO - Toevoegen van extra kolommen aan DataFrame
+2025-04-18 10:33:32,002 - whatsapp_analysis - INFO - Kolommen toegevoegd: 20 kolommen totaal
+2025-04-18 10:33:32,002 - whatsapp_analysis - INFO - Statistieken: 1378 afbeeldingen, 0 tikkies, gemiddelde berichtlengte: 53.4
+2025-04-18 10:33:32,002 - whatsapp_analysis - INFO - Data verwerkt
+2025-04-18 10:33:32,003 - whatsapp_analysis - INFO - Initialiseren van Merger
+2025-04-18 10:33:32,003 - whatsapp_analysis - INFO - Laden van spelerrollen uit: /home/azureuser/DAV_HU_AS/data/raw/Roles.json
+2025-04-18 10:33:32,020 - whatsapp_analysis - INFO - Spelerrollen geladen met 72 entries
+2025-04-18 10:33:32,020 - whatsapp_analysis - INFO - Samenvoegen van dataframes op basis van auteur
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Samenvoeging behield 99.7% van de oorspronkelijke rijen
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Dataframes samengevoegd, resultaat heeft vorm: (11411, 23)
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Ophalen van verwerkt dataframe
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Data samengevoegd
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Initialiseren van HockeyBarChart
+2025-04-18 10:33:32,050 - whatsapp_analysis - INFO - Berekenen van gemiddelde berichtlengte per functie
+2025-04-18 10:33:32,070 - whatsapp_analysis - INFO - Maken van barplot voor gemiddelde berichtlengte
+2025-04-18 10:33:32,126 - whatsapp_analysis - INFO - Toepassen instellingen op axes
+2025-04-18 10:33:32,126 - whatsapp_analysis - INFO - Instellingen succesvol toegepast op axes
+2025-04-18 10:33:32,243 - whatsapp_analysis - INFO - Opslaan plot
+2025-04-18 10:33:32,640 - whatsapp_analysis - INFO - Plot opgeslagen als: Comparing Categories.png in de map img
+2025-04-18 10:33:32,640 - whatsapp_analysis - INFO - Plot succesvol opgeslagen
+2025-04-18 10:33:32,640 - whatsapp_analysis - INFO - Vergelijkende categorieëngrafiek succesvol gemaakt
+2025-04-18 10:33:32,642 - whatsapp_analysis - INFO - Visualisatie comparing_categories voltooid in 0.79 seconden
+2025-04-18 10:33:32,642 - whatsapp_analysis - INFO - Start visualisatie: timeseries
+2025-04-18 10:33:32,642 - whatsapp_analysis - INFO - Start tijdreeks visualisatie
+2025-04-18 10:33:32,642 - whatsapp_analysis - INFO - Initialiseren van ConfigLoader
+2025-04-18 10:33:32,648 - whatsapp_analysis - INFO - Laden van configuratie uit: /home/azureuser/DAV_HU_AS/config.toml
+2025-04-18 10:33:32,650 - whatsapp_analysis - INFO - ConfigLoader succesvol geïnitialiseerd
+2025-04-18 10:33:32,650 - whatsapp_analysis - INFO - Initialiseren DataProcessor voor bestand: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:32,650 - whatsapp_analysis - INFO - Initializing BaseDataLoader with datafile: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:32,650 - whatsapp_analysis - INFO - Loading data from file: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:32,650 - whatsapp_analysis - INFO - Loading data from /home/azureuser/DAV_HU_AS/data/processed/wife.parq with extension .parq
+2025-04-18 10:33:32,766 - whatsapp_analysis - INFO - Successfully loaded dataframe with shape: (99998, 4)
+2025-04-18 10:33:32,767 - whatsapp_analysis - INFO - Kopie maken van DataFrame met vorm: (99998, 4)
+2025-04-18 10:33:32,770 - whatsapp_analysis - INFO - Toevoegen van extra kolommen aan DataFrame
+2025-04-18 10:33:33,276 - whatsapp_analysis - INFO - Kolommen toegevoegd: 15 kolommen totaal
+2025-04-18 10:33:33,282 - whatsapp_analysis - INFO - Statistieken: 7032 afbeeldingen, 0 tikkies, gemiddelde berichtlengte: 32.2
+2025-04-18 10:33:33,282 - whatsapp_analysis - INFO - Initialiseren PlotSettings voor sectie: time_series
+2025-04-18 10:33:33,282 - whatsapp_analysis - INFO - Laden instellingen voor sectie: time_series
+2025-04-18 10:33:33,282 - whatsapp_analysis - INFO - Laden configuratie uit config.toml
+2025-04-18 10:33:33,284 - whatsapp_analysis - INFO - Instellingen voor sectie 'time_series' succesvol geladen
+2025-04-18 10:33:33,284 - whatsapp_analysis - INFO - Initialiseren PhotoPlotter
+2025-04-18 10:33:33,284 - whatsapp_analysis - INFO - Maken van foto percentages plot per kwartaal
+2025-04-18 10:33:33,284 - whatsapp_analysis - INFO - Berekenen percentage foto's per kwartaal
+2025-04-18 10:33:33,664 - whatsapp_analysis - INFO - Toepassen instellingen op axes
+2025-04-18 10:33:33,673 - whatsapp_analysis - INFO - Instellingen succesvol toegepast op axes
+2025-04-18 10:33:33,681 - whatsapp_analysis - INFO - Opslaan plot
+2025-04-18 10:33:34,810 - whatsapp_analysis - INFO - Plot opgeslagen als: Time Series.png in de map img
+2025-04-18 10:33:34,816 - whatsapp_analysis - INFO - Plot succesvol opgeslagen
+2025-04-18 10:33:34,816 - whatsapp_analysis - INFO - Tijdreeks visualisatie succesvol gemaakt
+2025-04-18 10:33:34,828 - whatsapp_analysis - INFO - Visualisatie timeseries voltooid in 2.19 seconden
+2025-04-18 10:33:34,828 - whatsapp_analysis - INFO - Start visualisatie: distribution
+2025-04-18 10:33:34,828 - whatsapp_analysis - INFO - Start maken van distributievisualisatie
+2025-04-18 10:33:34,828 - whatsapp_analysis - INFO - Initialiseren van ConfigLoader
+2025-04-18 10:33:34,829 - whatsapp_analysis - INFO - Laden van configuratie uit: /home/azureuser/DAV_HU_AS/config.toml
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - ConfigLoader succesvol geïnitialiseerd
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - Configuratie geladen
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - Initialiseren DataProcessor voor bestand: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - Initializing BaseDataLoader with datafile: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - Loading data from file: /home/azureuser/DAV_HU_AS/data/processed/wife.parq
+2025-04-18 10:33:34,836 - whatsapp_analysis - INFO - Loading data from /home/azureuser/DAV_HU_AS/data/processed/wife.parq with extension .parq
+2025-04-18 10:33:34,943 - whatsapp_analysis - INFO - Successfully loaded dataframe with shape: (99998, 4)
+2025-04-18 10:33:34,943 - whatsapp_analysis - INFO - Kopie maken van DataFrame met vorm: (99998, 4)
+2025-04-18 10:33:34,945 - whatsapp_analysis - INFO - DataProcessor geïnitialiseerd
+2025-04-18 10:33:34,945 - whatsapp_analysis - INFO - Toevoegen van extra kolommen aan DataFrame
+2025-04-18 10:33:35,397 - whatsapp_analysis - INFO - Kolommen toegevoegd: 15 kolommen totaal
+2025-04-18 10:33:35,397 - whatsapp_analysis - INFO - Statistieken: 7032 afbeeldingen, 0 tikkies, gemiddelde berichtlengte: 32.2
+2025-04-18 10:33:35,402 - whatsapp_analysis - INFO - Kolommen toegevoegd aan dataframe
+2025-04-18 10:33:35,403 - whatsapp_analysis - INFO - Initialiseren ReactionsAdder
+2025-04-18 10:33:35,403 - whatsapp_analysis - INFO - ReactionsAdder geïnitialiseerd
+2025-04-18 10:33:35,403 - whatsapp_analysis - INFO - Start verwerking reactiedata
+2025-04-18 10:33:35,403 - whatsapp_analysis - INFO - Filteren van berichten die geen antwoord zijn
+2025-04-18 10:33:35,560 - whatsapp_analysis - INFO - Reactiefiltering voltooid, 48.4% van de berichten behouden
+2025-04-18 10:33:35,561 - whatsapp_analysis - INFO - Toevoegen van reactietijd buckets
+2025-04-18 10:33:35,579 - whatsapp_analysis - INFO - Reactietijd buckets toegevoegd (max tijd: 4406.0 min)
+2025-04-18 10:33:35,579 - whatsapp_analysis - INFO - Berekenen van percentages en cumulatieve percentages
+2025-04-18 10:33:35,588 - whatsapp_analysis - INFO - Percentages berekend voor 36150 reacties
+2025-04-18 10:33:35,588 - whatsapp_analysis - INFO - Reactiedata verwerking voltooid voor 36150 berichten
+2025-04-18 10:33:35,588 - whatsapp_analysis - INFO - Data verwerkt, 36150 reacties geanalyseerd
+2025-04-18 10:33:35,596 - whatsapp_analysis - INFO - Initialiseren van ReactionPlotter
+2025-04-18 10:33:35,596 - whatsapp_analysis - INFO - Maken van distributieplot
+2025-04-18 10:33:36,118 - whatsapp_analysis - INFO - Opslaan plot
+2025-04-18 10:33:36,641 - whatsapp_analysis - INFO - Plot opgeslagen als: Distribution in de map img
+2025-04-18 10:33:36,642 - whatsapp_analysis - INFO - Distributieplot succesvol opgeslagen
+2025-04-18 10:33:36,642 - whatsapp_analysis - INFO - Distributievisualisatie succesvol gemaakt
+2025-04-18 10:33:36,662 - whatsapp_analysis - INFO - Visualisatie distribution voltooid in 1.83 seconden
+2025-04-18 10:33:36,662 - whatsapp_analysis - INFO - Start visualisatie: relationships
+2025-04-18 10:33:36,662 - whatsapp_analysis - INFO - Start maken van relatievisualisatie
+2025-04-18 10:33:36,662 - whatsapp_analysis - INFO - Initialiseren van ConfigLoader
+2025-04-18 10:33:36,668 - whatsapp_analysis - INFO - Laden van configuratie uit: /home/azureuser/DAV_HU_AS/config.toml
+2025-04-18 10:33:36,670 - whatsapp_analysis - INFO - ConfigLoader succesvol geïnitialiseerd
+2025-04-18 10:33:36,670 - whatsapp_analysis - INFO - Configuratie geladen
+2025-04-18 10:33:36,671 - whatsapp_analysis - INFO - Initialiseren DataProcessor voor bestand: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:36,671 - whatsapp_analysis - INFO - Initializing BaseDataLoader with datafile: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:36,671 - whatsapp_analysis - INFO - Loading data from file: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:36,671 - whatsapp_analysis - INFO - Loading data from /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq with extension .parq
+2025-04-18 10:33:36,690 - whatsapp_analysis - INFO - Successfully loaded dataframe with shape: (11442, 10)
+2025-04-18 10:33:36,691 - whatsapp_analysis - INFO - Kopie maken van DataFrame met vorm: (11442, 10)
+2025-04-18 10:33:36,691 - whatsapp_analysis - INFO - Toevoegen van extra kolommen aan DataFrame
+2025-04-18 10:33:36,756 - whatsapp_analysis - INFO - Kolommen toegevoegd: 20 kolommen totaal
+2025-04-18 10:33:36,757 - whatsapp_analysis - INFO - Statistieken: 1378 afbeeldingen, 0 tikkies, gemiddelde berichtlengte: 53.4
+2025-04-18 10:33:36,757 - whatsapp_analysis - INFO - Data verwerkt en kolommen toegevoegd
+2025-04-18 10:33:36,757 - whatsapp_analysis - INFO - Initialiseren van Merger
+2025-04-18 10:33:36,757 - whatsapp_analysis - INFO - Laden van spelerrollen uit: /home/azureuser/DAV_HU_AS/data/raw/Roles.json
+2025-04-18 10:33:36,766 - whatsapp_analysis - INFO - Spelerrollen geladen met 72 entries
+2025-04-18 10:33:36,766 - whatsapp_analysis - INFO - Samenvoegen van dataframes op basis van auteur
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Samenvoeging behield 99.7% van de oorspronkelijke rijen
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Dataframes samengevoegd, resultaat heeft vorm: (11411, 23)
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Ophalen van verwerkt dataframe
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Data samengevoegd met rollen
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Initialiseren ReactionsAdder
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Start verwerking reactiedata
+2025-04-18 10:33:36,786 - whatsapp_analysis - INFO - Filteren van berichten die geen antwoord zijn
+2025-04-18 10:33:36,812 - whatsapp_analysis - INFO - Reactiefiltering voltooid, 80.5% van de berichten behouden
+2025-04-18 10:33:36,812 - whatsapp_analysis - INFO - Toevoegen van reactietijd buckets
+2025-04-18 10:33:36,822 - whatsapp_analysis - INFO - Reactietijd buckets toegevoegd (max tijd: 521406.0 min)
+2025-04-18 10:33:36,822 - whatsapp_analysis - INFO - Berekenen van percentages en cumulatieve percentages
+2025-04-18 10:33:36,825 - whatsapp_analysis - INFO - Percentages berekend voor 7426 reacties
+2025-04-18 10:33:36,826 - whatsapp_analysis - INFO - Reactiedata verwerking voltooid voor 7426 berichten
+2025-04-18 10:33:36,826 - whatsapp_analysis - INFO - Reacties verwerkt
+2025-04-18 10:33:36,826 - whatsapp_analysis - INFO - Initialiseren van Replier
+2025-04-18 10:33:36,832 - whatsapp_analysis - INFO - Voorbereiden data voor analyse
+2025-04-18 10:33:36,901 - whatsapp_analysis - INFO - Maken van heatmap voor relaties tussen posities
+2025-04-18 10:33:37,049 - whatsapp_analysis - INFO - Opslaan plot
+2025-04-18 10:33:37,552 - whatsapp_analysis - INFO - Plot opgeslagen als: Relationships in de map img
+2025-04-18 10:33:37,552 - whatsapp_analysis - INFO - Heatmap opgeslagen
+2025-04-18 10:33:37,552 - whatsapp_analysis - INFO - Relatievisualisatie succesvol gemaakt
+2025-04-18 10:33:37,555 - whatsapp_analysis - INFO - Visualisatie relationships voltooid in 0.89 seconden
+2025-04-18 10:33:37,555 - whatsapp_analysis - INFO - Start visualisatie: clustering
+2025-04-18 10:33:37,555 - whatsapp_analysis - INFO - Start maken van clustering visualisatie
+2025-04-18 10:33:37,555 - whatsapp_analysis - INFO - Initialiseren van ConfigLoader
+2025-04-18 10:33:37,555 - whatsapp_analysis - INFO - Laden van configuratie uit: /home/azureuser/DAV_HU_AS/config.toml
+2025-04-18 10:33:37,562 - whatsapp_analysis - INFO - ConfigLoader succesvol geïnitialiseerd
+2025-04-18 10:33:37,562 - whatsapp_analysis - INFO - Initialiseren DataProcessor voor bestand: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:37,562 - whatsapp_analysis - INFO - Initializing BaseDataLoader with datafile: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:37,563 - whatsapp_analysis - INFO - Loading data from file: /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq
+2025-04-18 10:33:37,563 - whatsapp_analysis - INFO - Loading data from /home/azureuser/DAV_HU_AS/data/processed/whatsapp.parq with extension .parq
+2025-04-18 10:33:37,579 - whatsapp_analysis - INFO - Successfully loaded dataframe with shape: (11442, 10)
+2025-04-18 10:33:37,579 - whatsapp_analysis - INFO - Kopie maken van DataFrame met vorm: (11442, 10)
+2025-04-18 10:33:37,580 - whatsapp_analysis - INFO - Toevoegen van extra kolommen aan DataFrame
+2025-04-18 10:33:37,644 - whatsapp_analysis - INFO - Kolommen toegevoegd: 20 kolommen totaal
+2025-04-18 10:33:37,645 - whatsapp_analysis - INFO - Statistieken: 1378 afbeeldingen, 0 tikkies, gemiddelde berichtlengte: 53.4
+2025-04-18 10:33:37,645 - whatsapp_analysis - INFO - Initialiseren Clustering
+2025-04-18 10:33:37,645 - whatsapp_analysis - INFO - Maken van corpus voor tekstanalyse
+2025-04-18 10:33:37,674 - whatsapp_analysis - INFO - Gefilterd op auteurs met meer dan 350 berichten
+2025-04-18 10:33:37,742 - whatsapp_analysis - INFO - Maken van aangepast kleurenpalet
+2025-04-18 10:33:37,748 - whatsapp_analysis - INFO - Maken van clustering visualisatie
+2025-04-18 10:34:01,768 - whatsapp_analysis - INFO - Plotten van de data in een scatterplot
+2025-04-18 10:34:01,905 - whatsapp_analysis - INFO - Aanpassen van de plot met extra opmaak
+2025-04-18 10:34:01,923 - whatsapp_analysis - INFO - Opslaan plot
+2025-04-18 10:34:02,993 - whatsapp_analysis - INFO - Plot opgeslagen als: Clustering.png in de map img
+2025-04-18 10:34:02,993 - whatsapp_analysis - INFO - Plot opgeslagen
+2025-04-18 10:34:02,994 - whatsapp_analysis - INFO - Clustering visualisatie succesvol gemaakt
+2025-04-18 10:34:02,994 - whatsapp_analysis - INFO - Clustering visualisatie succesvol gemaakt
+2025-04-18 10:34:03,002 - whatsapp_analysis - INFO - Visualisatie clustering voltooid in 25.45 seconden
+2025-04-18 10:34:03,002 - whatsapp_analysis - INFO - Project voltooid: 5/5 visualisaties succesvol gemaakt

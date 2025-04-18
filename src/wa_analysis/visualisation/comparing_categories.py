@@ -1,4 +1,7 @@
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 from wa_analysis.data_loading.config import ConfigLoader
@@ -15,17 +18,22 @@ settings = PlotSettings("comparing_categories")
 class HockeyBarChart:
     """Analyseert de berichten van gegroepeerde accounts."""
 
-    def __init__(self, settings: Settings, df: pd.DataFrame):
+    def __init__(self, settings: Settings, df: pd.DataFrame) -> None:
         logger.info("Initialiseren van HockeyBarChart")
-        self.plot_settings = settings
-        self.hockeybar_settings = MessageCalculations()
-        self.df = df
+        self.plot_settings: Settings = settings
+        self.hockeybar_settings: MessageCalculations = MessageCalculations()
+        self.df: pd.DataFrame = df
         logger.debug(f"DataFrame geladen met vorm: {df.shape}")
 
-    def calculate_message_count(self):
-        """Calculate the average message length for each function."""
+    def calculate_message_count(self) -> pd.DataFrame:
+        """
+        Calculate the average message length for each function.
+
+        Returns:
+            pd.DataFrame: DataFrame with average message length per function
+        """
         logger.info("Berekenen van gemiddelde berichtlengte per functie")
-        average_message_length = (
+        average_message_length: pd.DataFrame = (
             self.df.groupby(self.hockeybar_settings.function_column)[
                 self.hockeybar_settings.message_length_column
             ]
@@ -33,21 +41,33 @@ class HockeyBarChart:
             .reset_index()
             .sort_values(
                 by=self.hockeybar_settings.message_length_column, ascending=False
-            )  # Sort by message length
+            )
         )
         logger.debug(f"Resultaat berekening: {average_message_length}")
         return average_message_length
 
-    def plot_average_message_length(self, average_message_length):
-        """Create a bar plot of average message length with specific colors per category."""
+    def plot_average_message_length(
+        self, average_message_length: pd.DataFrame
+    ) -> plt.Figure:
+        """
+        Create a bar plot of average message length with specific colors per category.
+
+        Args:
+            average_message_length: DataFrame with average message length per function
+
+        Returns:
+            plt.Figure: The generated matplotlib figure
+        """
         logger.info("Maken van barplot voor gemiddelde berichtlengte")
 
         try:
+            fig: plt.Figure
+            ax: plt.Axes
             fig, ax = plt.subplots(figsize=(10, 8))
             logger.debug("Figuur en axes aangemaakt")
 
             # Definieer kleuren per categorie
-            category_colors = {}
+            category_colors: Dict[str, str] = {}
             for category in average_message_length[
                 self.hockeybar_settings.function_column
             ]:
@@ -59,7 +79,7 @@ class HockeyBarChart:
                     )
 
             # Maak een lijst van kleuren in dezelfde volgorde als de data
-            color_list = [
+            color_list: List[str] = [
                 category_colors[cat]
                 for cat in average_message_length[
                     self.hockeybar_settings.function_column
@@ -76,7 +96,7 @@ class HockeyBarChart:
 
             # Datalabels toevoegen aan de bars
             for bar in bars:
-                height = bar.get_height()
+                height: float = bar.get_height()
                 ax.annotate(
                     f"{height:.1f}",
                     xy=(bar.get_x() + bar.get_width() / 2, height),
@@ -122,37 +142,43 @@ class HockeyBarChart:
             raise
 
 
-def make_comparing_categories():
+def make_comparing_categories() -> plt.Figure:
+    """
+    Create a bar chart comparing message lengths by category.
+
+    Returns:
+        plt.Figure: The generated figure
+    """
     logger.info("Start maken van vergelijkende categorieëngrafiek")
 
     try:
         # Laad de configuratie en gegevens voor de merge
-        config_loader = ConfigLoader()
+        config_loader: ConfigLoader = ConfigLoader()
         logger.info("Configuratie geladen")
 
-        processor = DataProcessor(
+        processor: DataProcessor = DataProcessor(
             config=config_loader.config, datafile=config_loader.datafile_hockeyteam
         )
-        altered_df = processor.add_columns()
+        altered_df: pd.DataFrame = processor.add_columns()
         logger.info("Data verwerkt")
 
         # Gebruik Merger om de data samen te voegen
-        merger = Merger(
+        merger: Merger = Merger(
             config=config_loader.config,
             altered_df=altered_df,
             role_file=config_loader.role_file,
         )
-        merged_df = merger.get_processed_data()  # Haal het samengevoegde dataframe op
+        merged_df: pd.DataFrame = merger.get_processed_data()
         logger.info("Data samengevoegd")
 
         # Maak de grafiek met de samengevoegde data
-        chart = HockeyBarChart(settings, merged_df)
+        chart: HockeyBarChart = HockeyBarChart(settings, merged_df)
 
         # Bereken de gemiddelde berichtlengte per functie
-        avg_message_length = chart.calculate_message_count()
+        avg_message_length: pd.DataFrame = chart.calculate_message_count()
 
         # Maak de grafiek van de gemiddelde berichtlengte
-        fig = chart.plot_average_message_length(avg_message_length)
+        fig: plt.Figure = chart.plot_average_message_length(avg_message_length)
         logger.info("Vergelijkende categorieëngrafiek succesvol gemaakt")
 
         return fig
@@ -167,7 +193,7 @@ def make_comparing_categories():
 if __name__ == "__main__":
     logger.info("Start uitvoering comparing_categories.py")
     try:
-        make_comparing_categories()
+        result: plt.Figure = make_comparing_categories()
         logger.info("Einde uitvoering comparing_categories.py - Succesvol")
     except Exception as e:
         logger.error(f"Einde uitvoering comparing_categories.py - Fout: {str(e)}")
