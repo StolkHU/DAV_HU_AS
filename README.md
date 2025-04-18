@@ -62,14 +62,7 @@ Voer in de terminal uit:
 git clone https://github.com/StolkHU/DAV_HU_AS.git
 ```
 
-### 3. Voeg uw gebruikersnaam en e-mail toe aan Git (indien nodig)
-
-```bash
-git config --global user.name "Uw Naam"
-git config --global user.email "uw.email@voorbeeld.com"
-```
-
-### 4. Maak een virtuele omgeving aan en activeer deze (optioneel maar aanbevolen)
+### 3. Maak een virtuele omgeving aan en activeer deze (optioneel maar aanbevolen)
 
 ```bash
 cd DAV_HU_AS
@@ -78,7 +71,7 @@ source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows
 ```
 
-### 5. Installeer alle dependencies
+### 4. Installeer alle dependencies
 
 Als u een uv.lock bestand heeft in het project:
 ```bash
@@ -93,12 +86,6 @@ uv pip install -e .
 Of voor ontwikkelaars, inclusief development tools:
 ```bash
 uv pip install -e ".[dev]"
-```
-
-### 6. Maak de nodige mappen aan als deze nog niet bestaan
-
-```bash
-mkdir -p data/raw data/processed logs/code img
 ```
 
 ## 🔍 Gegevensvoorbereiding
