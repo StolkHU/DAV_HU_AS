@@ -1,4 +1,8 @@
+from typing import List, Tuple
+
 import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.figure import Figure
 
 from wa_analysis.data_loading.config import ConfigLoader
 from wa_analysis.data_loading.processor import DataProcessor
@@ -12,25 +16,40 @@ settings = PlotSettings("distribution")
 
 
 class ReactionPlotter:
-    def __init__(self, plot_settings: PlotSettings, data_processor: ReactionsAdder):
+    def __init__(
+        self, plot_settings: PlotSettings, data_processor: ReactionsAdder
+    ) -> None:
         """
         Constructor voor ReactionPlotter
+
+        Args:
+            plot_settings: Plot configuratie
+            data_processor: ReactionsAdder met verwerkte data
         """
         logger.info("Initialiseren van ReactionPlotter")
-        self.plot_settings = plot_settings
-        self.data_processor = data_processor
+        self.plot_settings: PlotSettings = plot_settings
+        self.data_processor: ReactionsAdder = data_processor
         self.df = data_processor.df
         logger.debug(f"DataFrame geladen met vorm: {self.df.shape}")
 
-    def create_plot(self, percentage_counts, cumulative_percentage):
+    def create_plot(
+        self, percentage_counts: pd.Series, cumulative_percentage: pd.Series
+    ) -> Figure:
         """
         Maakt de plot met individuele percentages en subtiele cumulatieve lijn
+
+        Args:
+            percentage_counts: Serie met percentages per bucket
+            cumulative_percentage: Serie met cumulatieve percentages
+
+        Returns:
+            Figure: Matplotlib figuur met de visualisatie
         """
         logger.info("Maken van distributieplot")
 
         try:
             # Labels voor de buckets
-            bucket_labels = [
+            bucket_labels: List[str] = [
                 "<1 min",
                 "1-5 min",
                 "5-15 min",
@@ -44,6 +63,8 @@ class ReactionPlotter:
             logger.debug(f"Bucket labels: {bucket_labels}")
 
             # Opbouw van de figuur
+            fig: Figure
+            ax1: plt.Axes
             fig, ax1 = plt.subplots(figsize=(10, 7))
             logger.debug("Figuur en primaire as aangemaakt")
 
@@ -70,7 +91,7 @@ class ReactionPlotter:
             ax1.tick_params(axis="x", rotation=45)
             logger.debug("Titel en labels ingesteld")
 
-            ax2 = ax1.twinx()
+            ax2: plt.Axes = ax1.twinx()
             logger.debug("Secundaire as aangemaakt voor cumulatieve lijn")
 
             # Plot de lijn met markers op elk punt en voeg een label toe voor de legenda
@@ -81,7 +102,7 @@ class ReactionPlotter:
                 color="black",
                 linewidth=2,
                 markersize=3,
-                label="Cumulatief",  # Label toevoegen voor de legenda
+                label="Cumulatief",
             )
 
             ax2.set_ylim(0, 1.05)  # Op 1.05 omdat het anders niet past
@@ -161,45 +182,54 @@ class ReactionPlotter:
             raise
 
 
-def make_distribution():
+def make_distribution() -> Figure:
     """
     Maak de distributie visualisatie
+
+    Returns:
+        Figure: Matplotlib figuur met de visualisatie
     """
     logger.info("Start maken van distributievisualisatie")
 
     try:
         # Laad configuratie
-        config_loader = ConfigLoader()
+        config_loader: ConfigLoader = ConfigLoader()
         logger.info("Configuratie geladen")
 
         # Maak data processor aan
-        data_processor = DataProcessor(
+        data_processor: DataProcessor = DataProcessor(
             config=config_loader.config, datafile=config_loader.datafile_wife
         )
         logger.info("DataProcessor geïnitialiseerd")
 
         # Voeg kolommen toe
-        altered_dataframe = data_processor.add_columns()
+        altered_dataframe: pd.DataFrame = data_processor.add_columns()
         logger.info("Kolommen toegevoegd aan dataframe")
 
         # Initialiseer de ReactionsAdder en verwerk de data
-        reactions_adder = ReactionsAdder(config_loader.config, altered_dataframe)
+        reactions_adder: ReactionsAdder = ReactionsAdder(
+            config_loader.config, altered_dataframe
+        )
         logger.info("ReactionsAdder geïnitialiseerd")
 
+        result_tuple: Tuple[pd.DataFrame, pd.Series, pd.Series, pd.Series, int] = (
+            reactions_adder.process_data()
+        )
         (
             altered_df,
             reactie_counts,
             percentage_counts,
             cumulative_percentage,
             total_count,
-        ) = reactions_adder.process_data()
+        ) = result_tuple
+
         logger.info(f"Data verwerkt, {total_count} reacties geanalyseerd")
         logger.debug(f"Percentage counts: {percentage_counts}")
         logger.debug(f"Cumulatieve percentages: {cumulative_percentage}")
 
         # Maak de chart aan met data processor
-        chart = ReactionPlotter(settings, reactions_adder)
-        fig = chart.create_plot(percentage_counts, cumulative_percentage)
+        chart: ReactionPlotter = ReactionPlotter(settings, reactions_adder)
+        fig: Figure = chart.create_plot(percentage_counts, cumulative_percentage)
         logger.info("Distributievisualisatie succesvol gemaakt")
 
         return fig

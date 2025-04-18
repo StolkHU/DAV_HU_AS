@@ -1,0 +1,158 @@
+raw = "data/raw"
+processed = "data/processed"
+input = "_chat.txt"
+current = "whatsapp.parq"
+inputpath = "whatsapp.csv"
+role_file = "Roles.json"
+wife_file = "wife.parq"
+datetime_format = "%d-%m-%Y %H:%M"
+images = "img"
+logging = "logs/code"
+log_file = "logging file.log"
+output_folder = "img"
+
+[project.scripts]
+mymodule = "module.main:main"
+
+[project]
+name = "module"
+
+[comparing_categories]
+figsize = [10, 8]
+suptitle = "Kort maar krachtig: De communicatiekloof tussen veld en zijlijn"
+suptitle_fontsize = 16
+suptitle_fontweight = "bold"
+title = "Terwijl stafleden uitweiden, houden spelers het kort(er)"
+title_fontsize = 12
+title_fontstyle = "italic"
+xlabel = "Positie"
+xlabel_fontweight = "bold"
+xlabel_fontsize = 12
+xlabel_rotation = ""
+ylabel = "Gemiddelde lengte van berichten"
+ylabel_fontweight = "bold"
+ylabel_fontsize = 12
+color = "silver"
+save_as = "Comparing Categories.png"
+figtext = "Gebaseerd op 11.442 berichten verstuurd in de groepschat van een hockeyteam. \nStaf is iedereen die rondom het team werkt, maar geen speler is. Denk aan een trainer, coach, fysio, etc."
+figtext_x = 0.05
+figtext_y = 0.05
+figtext_fontsize = 12
+figtext_ha = "left"
+figtext_va = "top"
+subplot_adjust_bottom = 0.12
+show_x_label = "True"
+show_y_label = "True"
+legend_on = "False"
+legend_title = ""
+
+
+[time_series]
+figsize = [20, 15]
+suptitle = "Photoboom"
+suptitle_fontsize = 22
+suptitle_fontweight = "bold"
+title = "Het percentage foto's stijgt aanzienlijk in aanloop naar en na de geboorte van onze dochter"
+title_fontsize = 14
+title_fontstyle = "italic"
+xlabel = "Kwartaal"
+xlabel_fontweight = "bold"
+xlabel_fontsize = 14
+xlabel_rotation = 45
+ylabel = "Percentage foto's"
+ylabel_fontweight = "bold"
+ylabel_fontsize = 12
+color = "silver"
+save_as = "Time Series.png"
+figtext = "Gebaseerd op 99.998 berichten tussen twee partners tussen 18-08-2020 en 11-02-2025"
+figtext_x = 0.1
+figtext_y = -0.05
+figtext_fontsize = 12
+figtext_ha = "left"
+show_x_label = "True"
+show_y_label = "True"
+legend_on = "False"
+legend_title = ""
+
+
+[distribution]
+figsize = [10, 6]
+suptitle = "Liefde op het eerste bericht"
+suptitle_fontsize = 18
+suptitle_fontweight = "bold"
+title = "De kans dat een bericht wordt beantwoord binnen een kwartier is groter dan 0.73"
+title_fontsize = 14
+title_fontstyle = "italic"
+xlabel = "Reactietijd"
+xlabel_fontweight = "bold"
+xlabel_fontsize = 12
+xlabel_rotation = ""
+ylabel = "Waarschijnlijkheid"
+ylabel_fontweight = "bold"
+ylabel_fontsize = 12
+color = "silver"
+save_as = "Distribution"
+figtext = "Gebaseerd op een gesprek tussen twee partners. \nTotaal aantal berichten met respons van de andere partner: 36.150. Dit betekent geen reactie op jezelf."
+figtext_x = 0.01
+figtext_y = -0.02
+figtext_fontsize = 10
+figtext_ha = "left"
+show_x_label = "True"
+show_y_label = "True"
+legend_on = "False"
+legend_title = ""
+
+[relationships]
+figsize = [10, 6]
+suptitle = "Ook in de groepschat zetten de verdedigers de lijnen uit"
+suptitle_fontsize = 18
+suptitle_fontweight = "bold"
+title = "Grootste kans op een reply van een verdediger"
+title_fontsize = 14
+title_fontstyle = "italic"
+xlabel = "Beantwoorder"
+xlabel_fontweight = "bold"
+xlabel_fontsize = 12
+xlabel_rotation = ""
+ylabel = "Verzender"
+ylabel_fontweight = "bold"
+ylabel_fontsize = 12
+color = "silver"
+save_as = "Relationships"
+figtext = "Gebaseerd op 9.182 berichten, waarbij iemand niet op zichzelf heeft gereageerd."
+figtext_x = 0.01
+figtext_y = 0.01
+figtext_fontsize = 10
+figtext_ha = "left"
+show_x_label = "True"
+show_y_label = "True"
+legend_on = "False"
+legend_title = ""
+
+
+[clustering]
+suptitle = "De coach communiceert duidelijk anders dan de rest"
+suptitle_fontsize = 18
+suptitle_fontweight = "bold"
+title = "en bemoeit zich al helemaal niet met het verzamelen..."
+title_fontsize = 14
+title_fontstyle = "italic"
+xlabel = ""
+xlabel_fontweight = "bold"
+xlabel_fontsize = 12
+xlabel_rotation = ""
+ylabel = ""
+ylabel_fontweight = "bold"
+ylabel_fontsize = 12
+color = "silver"
+save_as = "Clustering.png"
+figtext = "Gebaseerd op de top 10 bijdragers aan de WhatsApp groepchat (op basis van aantal berichten).\nBij het verzamelen wordt meestal één bericht gemaakt, waar de spelers hun eigen naam in zetten en versturen."
+figtext_x = 0.01
+figtext_y = 0.01
+figtext_fontsize = 10
+figtext_ha = "left"
+show_x_label = "False"
+show_y_label = "False"
+legend_on = "True"
+legend_title = "Auteurs"
+axis_off = ""

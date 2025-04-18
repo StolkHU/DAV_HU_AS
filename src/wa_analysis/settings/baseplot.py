@@ -1,6 +1,8 @@
-## A python program for a Base Plot
+from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
 from wa_analysis.settings.logger import Logger
 from wa_analysis.settings.settings import Settings
@@ -13,15 +15,20 @@ logger = Logger().get_logger()
 class BasePlot:
     """Base class for creating plots."""
 
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings) -> None:
         logger.info("Initialiseren BasePlot")
-        self.settings = settings
-        self.fig = None
-        self.ax = None
+        self.settings: Settings = settings
+        self.fig: Optional[Figure] = None
+        self.ax: Optional[Axes] = None
         logger.debug("BasePlot geïnitialiseerd")
 
-    def create_figure(self):
-        """Create a figure and configure it based on settings."""
+    def create_figure(self) -> Tuple[Figure, Axes]:
+        """
+        Create a figure and configure it based on settings.
+
+        Returns:
+            Tuple[Figure, Axes]: Matplotlib figure and axes objects
+        """
         logger.info("Aanmaken figuur en assen")
 
         try:
@@ -30,7 +37,7 @@ class BasePlot:
                 logger.warning(
                     "Figsize niet gevonden in settings, gebruik standaard (10, 6)"
                 )
-                figsize = (10, 6)
+                figsize: Tuple[int, int] = (10, 6)
             else:
                 figsize = self.settings.figsize
                 logger.debug(f"Figsize uit settings: {figsize}")
@@ -63,7 +70,7 @@ class BasePlot:
 
             # Suptitle instellen
             if hasattr(self.settings, "suptitle") and self.settings.suptitle:
-                self.ax.set_suptitle(self.settings.suptitle)
+                self.fig.suptitle(self.settings.suptitle)
                 logger.debug(f"Suptitle ingesteld: {self.settings.suptitle}")
 
             # Legenda instellen
@@ -94,8 +101,13 @@ class BasePlot:
             logger.error(f"Fout bij het aanmaken van figuur: {str(e)}")
             raise
 
-    def get_figure(self):
-        """Return the figure, creating it if needed."""
+    def get_figure(self) -> Figure:
+        """
+        Return the figure, creating it if needed.
+
+        Returns:
+            Figure: The matplotlib figure object
+        """
         logger.info("Ophalen figuur")
         if self.fig is None:
             logger.debug("Figuur bestaat nog niet, wordt nu aangemaakt")

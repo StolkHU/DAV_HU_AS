@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import pandas as pd
 
 from wa_analysis.data_loading.processor import DataProcessor
@@ -8,14 +10,17 @@ logger = Logger().get_logger()
 
 
 class ReactionsAdder(DataProcessor):
-    def __init__(self, config, df: pd.DataFrame):
+    def __init__(self, config: dict, df: pd.DataFrame) -> None:
         logger.info("Initialiseren ReactionsAdder")
-        self.df = df
+        self.df: pd.DataFrame = df
         logger.debug(f"DataFrame geladen met vorm: {df.shape}")
 
-    def create_reaction_dataframe(self):
+    def create_reaction_dataframe(self) -> pd.DataFrame:
         """
         Haalt berichten eruit die geen beantwoorder hebben
+
+        Returns:
+            pd.DataFrame: Gefilterd DataFrame met alleen reacties
         """
         logger.info("Filteren van berichten die geen antwoord zijn")
         try:
@@ -47,14 +52,17 @@ class ReactionsAdder(DataProcessor):
             logger.error(f"Fout bij het maken van reactie-dataframe: {str(e)}")
             raise
 
-    def add_buckets(self):
+    def add_buckets(self) -> pd.DataFrame:
         """
         Voegt reactietijd buckets toe aan de dataframe
+
+        Returns:
+            pd.DataFrame: DataFrame met toegevoegde reactietijd buckets
         """
         logger.info("Toevoegen van reactietijd buckets")
         try:
             max_time = self.df["time_since_prev"].max()
-            buckets = [0, 1, 5, 15, 30, 60, 120, 240, max_time]
+            buckets: List[float] = [0, 1, 5, 15, 30, 60, 120, 240, max_time]
             logger.debug(f"Buckets: {buckets}")
 
             self.df["reactietijd_bucket"] = pd.cut(self.df["time_since_prev"], buckets)
@@ -72,9 +80,13 @@ class ReactionsAdder(DataProcessor):
             logger.error(f"Fout bij het toevoegen van buckets: {str(e)}")
             raise
 
-    def calculate_percentages(self):
+    def calculate_percentages(self) -> Tuple[pd.Series, pd.Series, pd.Series, int]:
         """
         Bereken percentage van totaal en cumulatief percentage
+
+        Returns:
+            Tuple[pd.Series, pd.Series, pd.Series, int]: Tuple van (reactie_counts, percentage_counts,
+                                                          cumulative_percentage, total_count)
         """
         logger.info("Berekenen van percentages en cumulatieve percentages")
         try:
@@ -96,9 +108,12 @@ class ReactionsAdder(DataProcessor):
             logger.error(f"Fout bij het berekenen van percentages: {str(e)}")
             raise
 
-    def process_data(self):
+    def process_data(self) -> Tuple[pd.DataFrame, pd.Series, pd.Series, pd.Series, int]:
         """
         Voert alle bewerkingen uit en geeft de dataframe terug
+
+        Returns:
+            Tuple: Een tuple met (df, reactie_counts, percentage_counts, cumulative_percentage, total_count)
         """
         logger.info("Start verwerking reactiedata")
         try:
