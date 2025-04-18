@@ -2,8 +2,8 @@
 
 Dit project biedt een uitgebreide toolkit voor de analyse en visualisatie van WhatsApp gespreksdata. Het analyseert communicatiepatronen, berichtlengtes, timing en interacties tussen deelnemers in WhatsApp-gesprekken.
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![Pandas](https://img.shields.io/badge/Pandas-2.0+-green.svg)
+![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
+![Pandas](https://img.shields.io/badge/Pandas-2.2+-green.svg)
 ![Matplotlib](https://img.shields.io/badge/Matplotlib-Latest-orange.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
@@ -22,6 +22,255 @@ Het project genereert vijf verschillende visualisaties voor inzicht in WhatsApp-
 3. **⏱️ Distributieanalyse** - Visualiseert responstijden tussen berichten
 4. **🔄 Relatieanalyse** - Toont interactiepatronen tussen verschillende rollen/posities
 5. **👥 Clusteranalyse** - Groepeert gebruikers op basis van communicatiestijl
+
+## 📊 Visualisatie-voorbeelden
+
+### Vergelijking van categorieën
+![Example](img/Comparing%20Categories.png)
+*Deze visualisatie toont dat stafleden gemiddeld veel langere berichten sturen dan spelers. Dit suggereert dat stafleden vaak meer gedetailleerde informatie moeten overbrengen.*
+
+### Tijdreeksanalyse 
+![Example](img/Time%20Series.png)
+*Deze visualisatie toont een duidelijke toename in het delen van foto's na de geboorte van een kind in november 2022. Het percentage foto's steeg van gemiddeld 5% naar bijna 15% in de kwartalen na de geboorte.*
+
+## 🚀 Installatie
+
+Deze installatiehandleiding gaat uit van een UNIX-systeem (macOS of Linux). Als u de mogelijkheid heeft om een VM te gebruiken, raadpleeg dan de referentiemap voor lab-setups. Voor wie op een Windows-machine werkt, gebruik Git Bash wanneer er wordt verwezen naar een terminal of CLI (command line interface).
+
+### 1. Installeer Python met uv
+
+Uv is een snelle pakketmanager voor Python. Let op: uv kan al geïnstalleerd zijn op uw VM.
+
+1. Controleer of uv al is geïnstalleerd met:
+   ```bash
+   which uv
+   ```
+   Als het een locatie teruggeeft, bijvoorbeeld `/Users/user/.cargo/bin/uv`, dan is uv geïnstalleerd.
+
+2. Zo niet, installeer uv met:
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+   Voor macOS en Linux. Voor Windows, raadpleeg de uv-documentatie.
+
+3. Start een nieuwe terminal en test met `which uv` of de installatie is gelukt.
+
+### 2. Clone de Git repository
+
+Voer in de terminal uit:
+```bash
+git clone https://github.com/StolkHU/DAV_HU_AS.git
+```
+
+### 3. Voeg uw gebruikersnaam en e-mail toe aan Git (indien nodig)
+
+```bash
+git config --global user.name "Uw Naam"
+git config --global user.email "uw.email@voorbeeld.com"
+```
+
+### 4. Maak een virtuele omgeving aan en activeer deze (optioneel maar aanbevolen)
+
+```bash
+cd DAV_HU_AS
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+```
+
+### 5. Installeer alle dependencies
+
+Als u een uv.lock bestand heeft in het project:
+```bash
+uv sync
+```
+
+Of installeer alle dependencies met:
+```bash
+uv pip install -e .
+```
+
+Of voor ontwikkelaars, inclusief development tools:
+```bash
+uv pip install -e ".[dev]"
+```
+
+### 6. Maak de nodige mappen aan als deze nog niet bestaan
+
+```bash
+mkdir -p data/raw data/processed logs/code img
+```
+
+## 🔍 Gegevensvoorbereiding
+
+1. Plaats een geconverteerd WhatsApp-bestand in de `data/raw/` map.
+   
+   Voor het converteren van WhatsApp-exports naar een bruikbaar formaat kunt u de whatsapp-analyzer vanaf https://github.com/raoulg/MADS-DAV gebruiken voor uitgebreide conversieopties.
+
+2. Pas `config.toml` aan met de juiste bestandsnamen en locaties. Belangrijke instellingen zijn:
+   ```toml
+   raw = "data/raw"
+   processed = "data/processed"
+   current = "whatsapp.parq"  # Uw bestandsnaam hier
+   role_file = "Roles.json"
+   logging = "logs/code"
+   output_folder = "img"
+   # ... andere instellingen
+   ```
+
+3. Pas de visualisatie-instellingen in `config.toml` naar wens aan. Bijvoorbeeld voor de categorie-vergelijking:
+   ```toml
+   [comparing_categories]
+   figsize = [10, 8]
+   suptitle = "Kort maar krachtig: De communicatiekloof tussen veld en zijlijn"
+   title = "Terwijl stafleden uitweiden, houden spelers het kort(er)"
+   # ... andere instellingen
+   ```
+
+## 📊 Visualisaties genereren
+
+### Alle visualisaties in één keer genereren
+
+Zorg ervoor dat uw virtuele omgeving is geactiveerd (als u deze gebruikt):
+```bash
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+```
+
+Voer vervolgens uit:
+```bash
+python main.py
+```
+
+Alle gegenereerde visualisaties worden opgeslagen in de `img/` map zoals gespecificeerd in `config.toml`.
+
+### Specifieke visualisaties maken
+
+U kunt een specifieke visualisatie genereren door de bijbehorende functie rechtstreeks aan te roepen:
+
+```python
+# Alleen de categorie-vergelijking genereren
+from wa_analysis.visualisation.comparing_categories import make_comparing_categories
+make_comparing_categories()
+
+# Alleen de tijdreeksanalyse genereren
+from wa_analysis.visualisation.time_series import make_timeseries
+make_timeseries()
+```
+
+### Snelle demo
+
+Voor een snelle test, na het installeren van de dependencies:
+
+```bash
+# Een minimale config.toml maken met noodzakelijke instellingen
+echo 'raw = "data/raw"
+processed = "data/processed"
+current = "whatsapp.parq"
+output_folder = "img"' > config.toml
+
+# Plaats een WhatsApp-export in data/raw
+
+# Voer een visualisatie uit
+python -c "from wa_analysis.visualisation.comparing_categories import make_comparing_categories; make_comparing_categories()"
+```
+
+## 🧪 Demo: Aan de slag
+
+Hier volgt een volledig voorbeeld van hoe u uw eigen WhatsApp-data kunt analyseren:
+
+```python
+# Voorbeeld: Maak een aangepaste berichtlengte-analyse
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from wa_analysis.data_loading.config import ConfigLoader
+from wa_analysis.data_loading.processor import DataProcessor
+from wa_analysis.settings.settings import PlotSettings
+from wa_analysis.settings.logger import Logger
+
+# Initialiseer de logger
+logger = Logger().get_logger()
+logger.info("Start aangepaste analyse")
+
+# Laad de configuratie
+config_loader = ConfigLoader()
+# De configuratie wordt geladen uit config.toml en bevat alle instellingen
+# voor datalocaties, bestandspaden en visualisatie-eigenschappen
+print(f"Output folder: {config_loader.config['output_folder']}")
+print(f"Current datafile: {config_loader.config['current']}")
+
+# Verwerk de ruwe data
+processor = DataProcessor(
+    config=config_loader.config, 
+    datafile=config_loader.datafile_hockeyteam
+)
+processed_df = processor.add_columns()
+logger.info(f"Data verwerkt: {processed_df.shape}")
+
+# Voer een aangepaste analyse uit
+# Bijvoorbeeld: gemiddelde berichtlengte per uur van de dag
+processed_df['hour'] = processed_df['timestamp'].dt.hour
+hourly_avg = processed_df.groupby('hour')['message_length'].mean().reset_index()
+
+# Visualisatie-instellingen laden uit config.toml
+# Dit laat zien hoe de settings uit het config-bestand gebruikt worden
+settings = PlotSettings("custom_analysis")
+fig_settings = settings.get_settings()
+figsize = fig_settings.get('figsize', [12, 6])
+title = fig_settings.get('title', 'Gemiddelde berichtlengte per uur')
+title_fontsize = fig_settings.get('title_fontsize', 16)
+
+# Visualiseer de resultaten
+fig, ax = plt.subplots(figsize=figsize)
+ax.bar(hourly_avg['hour'], hourly_avg['message_length'], color='skyblue')
+ax.set_title(title, fontsize=title_fontsize)
+ax.set_xlabel('Uur van de dag')
+ax.set_ylabel('Gemiddelde berichtlengte')
+ax.set_xticks(range(0, 24))
+plt.tight_layout()
+
+# Sla het resultaat op in de map gespecificeerd in config.toml
+output_path = f"{config_loader.config['output_folder']}/custom_hourly_analysis.png"
+fig.savefig(output_path)
+logger.info(f"Analyse succesvol voltooid en opgeslagen in {output_path}")
+
+print(f"Aangepaste analyse is voltooid en opgeslagen in {output_path}")
+```
+
+## 📝 Aanpassen van visualisaties
+
+U kunt eenvoudig de bestaande visualisaties aanpassen of nieuwe maken. Dit kan in de code van de visualitie zelf of via de config.toml.
+
+
+## 📝 Logging
+
+Het project gebruikt een uitgebreid loggingsysteem op basis van de `loguru` bibliotheek, waardoor ontwikkelaars en gebruikers:
+
+1. Gedetailleerde informatie krijgen over de uitvoering van code
+2. Problemen gemakkelijker kunnen diagnosticeren
+3. Performance-metingen kunnen verzamelen
+
+### Log structuur en locatie
+
+Logbestanden worden opgeslagen in de `logs/code/` map zoals gespecificeerd in `config.toml`. Een typisch logbestand bevat timestamp, logniveau, en gedetailleerde berichten:
+
+```
+2025-04-18 15:30:22.241 | INFO     | wa_analysis.data_loading.processor:process_data:42 - Verwerking van datafile gestart
+2025-04-18 15:30:23.154 | DEBUG    | wa_analysis.data_loading.processor:add_columns:78 - Berekening van message_length gestart
+2025-04-18 15:30:24.012 | INFO     | wa_analysis.data_loading.processor:add_columns:92 - Feature engineering voltooid: 5 nieuwe kolommen toegevoegd
+2025-04-18 15:30:24.510 | WARNING  | wa_analysis.visualisation.time_series:make_timeseries:133 - Ontbrekende waarden gedetecteerd in tijdreeks
+```
+
+### Logging best practices
+
+Bij gebruik van dit project wordt aanbevolen om:
+
+1. Logger te initialiseren aan het begin van elk script
+2. Belangrijke stappen te loggen met `logger.info()`
+3. Details over berekeningen toe te voegen met `logger.debug()`
+4. Potentiële problemen te markeren met `logger.warning()`
+5. Fouten vast te leggen met `logger.error()`
 
 ## 📁 Projectstructuur
 
@@ -67,195 +316,120 @@ DAV_HU_AS/
 
 ## 🛠️ Gebruikte technologieën
 
-- **Python 3.10+**: Basis programmeertaal
+- **Python 3.12+**: Basis programmeertaal
 - **pandas**: Krachtige dataframes voor dataverwerking en -manipulatie
 - **matplotlib & seaborn**: Uitgebreide visualisatiebibliotheken
 - **tomllib**: Beheer van configuratiebestanden in TOML-formaat
 - **pathlib**: Moderne manier voor bestandssysteembewerkingen
 - **scikit-learn**: Voor clusteranalyse en machine learning componenten
+- **sentence-transformers**: Voor tekstembedding
+- **plotly**: Voor interactieve visualisaties
+- **torch**: Voor machine learning modellen
+- **transformers**: Voor NLP taken en tekstverwerking
+- **loguru**: Voor uitgebreide logging functionaliteit
 
-## 🚀 Installatie
+## 📦 Projectdependencies
 
-1. Clone de repository:
-   ```bash
-   git clone https://github.com/StolkHU/DAV_HU_AS.git
-   cd DAV_HU_AS
-   ```
+De dependencies voor dit project zijn gedefinieerd in een `pyproject.toml` bestand. De belangrijkste dependencies zijn:
 
-2. Maak een virtuele omgeving aan (optioneel maar aanbevolen):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/macOS
-   venv\Scripts\activate     # Windows
-   ```
+```toml
+[project]
+name = "dav-hu-as"
+version = "0.1.0"
+description = "This is the code for the assignments of Adriaan Stolk for the course Data Analysis and Visualization"
+requires-python = ">=3.12"
+dependencies = [
+    "fastparquet>=2024.11.0",
+    "loguru>=0.7.3",
+    "matplotlib>=3.10.1",
+    "numpy>=2.2.3",
+    # ... andere dependencies
+]
 
-3. Installeer pip-tools en uv (indien nog niet beschikbaar):
-   ```bash
-   pip install pip-tools uv
-   ```
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "mypy>=1.15.0",
+    "ruff>=0.9.9",
+    # ... andere development dependencies
+]
+```
 
-4. Installeer de benodigde packages met uv:
-   ```bash
-   uv pip install -r requirements.txt
-   ```
-   
-   Of gebruik pip als alternatief:
-   ```bash
-   pip install -r requirements.txt
-   ```
+U kunt dit gebruiken met tools zoals pip, uv of hatch om de benodigde afhankelijkheden te installeren zoals beschreven in de installatie-instructies.
 
-5. Maak de nodige mappen aan als deze nog niet bestaan:
-   ```bash
-   mkdir -p data/raw data/processed logs/code img
-   ```
+## 💻 Ontwikkeltools en linters
 
-## 🔍 Gegevensvoorbereiding
+Dit project gebruikt moderne ontwikkeltools voor codekwaliteit:
 
-1. Plaats een geconverteerd WhatsApp-bestand in de `data/raw/` map.
-   
-   Voor het converteren van WhatsApp-exports naar een bruikbaar formaat kunt u de whatsapp-analyzer vanaf https://github.com/raoulg/MADS-DAV gebruiken voor uitgebreide conversieopties.
+- **black**: Code formatter die zorgt voor consistente stijl
+- **isort**: Automatisch ordenen van imports
+- **mypy**: Statische typechecker voor Python
+- **ruff**: Snelle Python linter voor code kwaliteitscontrole
+- **hatch**: Modern project beheer en packaging tool
 
-2. Update `config.toml` met de juiste bestandsnamen en locaties:
-   ```toml
-   raw = "data/raw"
-   processed = "data/processed"
-   current = "hockeyteam.parq"   # Uw bestandsnaam hier
-   ```
+Deze tools kunnen geïnstalleerd worden met:
 
-3. Update de visualisatie-instellingen in `config.toml` naar wens:
-   ```toml
-   [comparing_categories]
-   figsize = [10, 6]
-   suptitle = "Mijn analyse titel"
-   suptitle_fontsize = 16
-   ```
-
-## 📊 Visualisaties genereren
-
-### Alle visualisaties in één keer genereren
-
-Zorg ervoor dat uw virtuele omgeving is geactiveerd:
 ```bash
-source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate     # Windows
+pip install black isort mypy ruff hatch
 ```
 
-Voer vervolgens uit:
+Of als u uv gebruikt:
+
 ```bash
-python main.py
+uv add black isort mypy ruff hatch --dev
 ```
 
-Alle gegenereerde visualisaties worden opgeslagen in de `img/` map zoals gespecificeerd in `config.toml`.
+### Lefthook
 
-### Specifieke visualisaties maken
+Dit project gebruikt Lefthook voor git hooks management. Lefthook zorgt ervoor dat code-kwaliteitscontroles automatisch worden uitgevoerd vóór commits.
 
-U kunt een specifieke visualisatie genereren door de bijbehorende functie rechtstreeks aan te roepen:
-
-```python
-# Alleen de categorie-vergelijking genereren
-from wa_analysis.visualisation.comparing_categories import make_comparing_categories
-make_comparing_categories()
-
-# Alleen de tijdreeksanalyse genereren
-from wa_analysis.visualisation.time_series import make_timeseries
-make_timeseries()
+Installatie:
+```bash
+pip install lefthook
+lefthook install
 ```
 
-## 🧪 Demo: Aan de slag
+Lefthook voert bij elke commit automatisch de volgende controles uit:
+- Code formattering met `black`
+- Import sortering met `isort`
+- Linting met `ruff`
+- Typecontrole met `mypy`
 
-Hier volgt een volledig voorbeeld van hoe u uw eigen WhatsApp-data kunt analyseren:
+### .gitignore
 
-```python
-# Voorbeeld: Maak een aangepaste berichtlengte-analyse
+Het project bevat een `.gitignore` bestand dat veelvoorkomende Python bestanden uitsluit van versiebeheer, zoals:
+- Python bytecode en cachebestanden
+- Virtuele omgevingen
+- Gegenereerde bestanden en logs
+- IDE-specifieke mappen
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from wa_analysis.data_loading.config import ConfigLoader
-from wa_analysis.data_loading.processor import DataProcessor
-from wa_analysis.settings.settings import PlotSettings
-from wa_analysis.settings.logger import Logger
+### uv.lock
 
-# Initialiseer de logger
-logger = Logger().get_logger()
-logger.info("Start aangepaste analyse")
+Het `uv.lock` bestand wordt gegenereerd door de UV package manager en bevat exacte versies van alle dependencies voor reproduceerbare builds. Om een exacte omgeving te reconstrueren met het lock-bestand:
 
-# Laad de configuratie
-config_loader = ConfigLoader()
-
-# Verwerk de ruwe data
-processor = DataProcessor(
-    config=config_loader.config, 
-    datafile=config_loader.datafile_hockeyteam
-)
-processed_df = processor.add_columns()
-logger.info(f"Data verwerkt: {processed_df.shape}")
-
-# Voer een aangepaste analyse uit
-# Bijvoorbeeld: gemiddelde berichtlengte per uur van de dag
-processed_df['hour'] = processed_df['timestamp'].dt.hour
-hourly_avg = processed_df.groupby('hour')['message_length'].mean().reset_index()
-
-# Visualiseer de resultaten
-fig, ax = plt.subplots(figsize=(12, 6))
-ax.bar(hourly_avg['hour'], hourly_avg['message_length'], color='skyblue')
-ax.set_title('Gemiddelde berichtlengte per uur', fontsize=16)
-ax.set_xlabel('Uur van de dag')
-ax.set_ylabel('Gemiddelde berichtlengte')
-ax.set_xticks(range(0, 24))
-plt.tight_layout()
-
-# Sla het resultaat op
-fig.savefig('img/custom_hourly_analysis.png')
-logger.info("Analyse succesvol voltooid en opgeslagen")
-
-print("Aangepaste analyse is voltooid en opgeslagen in img/custom_hourly_analysis.png")
+```bash
+uv sync
 ```
 
-## 📝 Aanpassen van visualisaties
+## 📄 Configuratiebestanden en tools overzicht
 
-U kunt eenvoudig de bestaande visualisaties aanpassen of nieuwe maken. Hier is een voorbeeld van het aanpassen van de kleurenschema's:
+In één oogopslag:
 
-```python
-# Voorbeeld: De ColoredBarPlot klasse gebruiken met aangepaste kleuren
-from wa_analysis.settings.colored_bar_chart import ColoredBarPlot
-from wa_analysis.settings.settings import PlotSettings
-import pandas as pd
+### Configuratiebestanden
+- **config.toml**: Bevat paden, bestandsnamen en visualisatie-instellingen voor het project.
+- **pyproject.toml**: Definieert projectmetadata, dependencies en build-instructies.
+- **uv.lock**: Bevat exacte versies van alle afhankelijkheden voor reproduceerbare builds.
+- **.gitignore**: Specificeert bestanden en mappen die Git moet negeren.
+- **lefthook.yml**: Configureert pre-commit hooks voor automatische code-kwaliteitscontroles.
 
-# Uw data voorbereiden
-data = pd.DataFrame({
-    'Groep': ['A', 'B', 'C', 'D'],
-    'Waarde': [10, 15, 7, 12]
-})
+### Code kwaliteitstools
+- **black**: Formatteert Python-code volgens een consistente stijl.
+- **isort**: Sorteert imports op een gestandaardiseerde manier.
+- **ruff**: Snelle linter voor het identificeren van veelvoorkomende Python-problemen.
+- **mypy**: Statische typechecker voor Python.
 
-# Instellingen laden (of een eigen instantie maken)
-settings = PlotSettings("custom_section")
-
-# Maak de plot met aangepaste kleuren
-plot = ColoredBarPlot(settings.settings)
-(plot
-  .set_rotation(45)  # Roteer de x-as labels
-  .plot(
-      data=data,
-      x_column='Groep',
-      y_column='Waarde',
-      add_value_labels=True,
-      palette=['#ff6b6b', '#48dbfb', '#1dd1a1', '#f368e0']  # Aangepaste kleuren
-  )
-  .save_plot("mijn_aangepaste_plot.png")
-)
-```
-
-## 📊 Visualisatie-voorbeelden
-
-### Vergelijking van categorieën
-![Example](img/Comparing%20Categories.png)
-*Deze visualisatie toont dat stafleden gemiddeld veel langere berichten sturen dan spelers. Dit suggereert dat stafleden vaak meer gedetailleerde informatie moeten overbrengen.*
-
-### Tijdreeksanalyse 
-![Example](img/Time%20Series.png)
-*Deze visualisatie toont een duidelijke toename in het delen van foto's na de geboorte van een kind in november 2022. Het percentage foto's steeg van gemiddeld 5% naar bijna 15% in de kwartalen na de geboorte.*
-
-## 🔧 Probleemoplossing
+## 🔍 Probleemoplossing
 
 ### Veelvoorkomende problemen
 
@@ -292,16 +466,8 @@ rmdir /s /q venv  # Windows
 python -m venv venv
 source venv/bin/activate  # of venv\Scripts\activate op Windows
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -e .
 ```
-
-## 📈 Prestaties en optimalisaties
-
-Het project implementeert verschillende optimalisaties:
-
-- **Caching van verwerkte data**: Verwerkte data wordt opgeslagen voor hergebruik om herhaalde berekeningen te voorkomen
-- **Logging**: Uitgebreide logging voor debugging en performance-monitoring
-- **Modulair ontwerp**: Componenten kunnen onafhankelijk worden gebruikt voor maximale flexibiliteit
 
 ## 🔮 Toekomstige uitbreidingen
 
