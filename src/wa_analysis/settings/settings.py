@@ -282,6 +282,6 @@ class ColoredPlotSettings(PlotSettings):
 class MessageCalculations(BaseModel):
     """Settings for message calculations."""
 
-    function_column: str = "Position"
+    function_column: str = "Function"  # aan te passen naar Position of iets anders
     message_column: str = "message"
     message_length_column: str = "message_length"
