@@ -31,7 +31,7 @@ Het project genereert vijf verschillende visualisaties voor inzicht in WhatsApp-
 
 ### Tijdreeksanalyse 
 ![Example](img/Time%20Series.png)
-*Deze visualisatie toont een duidelijke toename in het delen van foto's na de geboorte van een kind in november 2022. Het percentage foto's steeg van gemiddeld 5% naar bijna 15% in de kwartalen na de geboorte.*
+*Deze visualisatie toont een duidelijke toename in het delen van foto's na de geboorte van een kind in november 2022. Het percentage foto's steeg van gemiddeld 5% naar 12% in de kwartalen na de geboorte.*
 
 ## 🚀 Installatie
 
@@ -229,36 +229,6 @@ print(f"Aangepaste analyse is voltooid en opgeslagen in {output_path}")
 
 U kunt eenvoudig de bestaande visualisaties aanpassen of nieuwe maken. Dit kan in de code van de visualitie zelf of via de config.toml.
 
-
-## 📝 Logging
-
-Het project gebruikt een uitgebreid loggingsysteem op basis van de `loguru` bibliotheek, waardoor ontwikkelaars en gebruikers:
-
-1. Gedetailleerde informatie krijgen over de uitvoering van code
-2. Problemen gemakkelijker kunnen diagnosticeren
-3. Performance-metingen kunnen verzamelen
-
-### Log structuur en locatie
-
-Logbestanden worden opgeslagen in de `logs/code/` map zoals gespecificeerd in `config.toml`. Een typisch logbestand bevat timestamp, logniveau, en gedetailleerde berichten:
-
-```
-2025-04-18 15:30:22.241 | INFO     | wa_analysis.data_loading.processor:process_data:42 - Verwerking van datafile gestart
-2025-04-18 15:30:23.154 | DEBUG    | wa_analysis.data_loading.processor:add_columns:78 - Berekening van message_length gestart
-2025-04-18 15:30:24.012 | INFO     | wa_analysis.data_loading.processor:add_columns:92 - Feature engineering voltooid: 5 nieuwe kolommen toegevoegd
-2025-04-18 15:30:24.510 | WARNING  | wa_analysis.visualisation.time_series:make_timeseries:133 - Ontbrekende waarden gedetecteerd in tijdreeks
-```
-
-### Logging best practices
-
-Bij gebruik van dit project wordt aanbevolen om:
-
-1. Logger te initialiseren aan het begin van elk script
-2. Belangrijke stappen te loggen met `logger.info()`
-3. Details over berekeningen toe te voegen met `logger.debug()`
-4. Potentiële problemen te markeren met `logger.warning()`
-5. Fouten vast te leggen met `logger.error()`
-
 ## 📁 Projectstructuur
 
 ```
@@ -415,6 +385,25 @@ In één oogopslag:
 - **isort**: Sorteert imports op een gestandaardiseerde manier.
 - **ruff**: Snelle linter voor het identificeren van veelvoorkomende Python-problemen.
 - **mypy**: Statische typechecker voor Python.
+
+## 📝 Logging
+
+Het project gebruikt een uitgebreid loggingsysteem op basis van de `loguru` bibliotheek, waardoor ontwikkelaars en gebruikers:
+
+1. Gedetailleerde informatie krijgen over de uitvoering van code
+2. Problemen gemakkelijker kunnen diagnosticeren
+3. Performance-metingen kunnen verzamelen
+
+### Log structuur en locatie
+
+Logbestanden worden opgeslagen in de `logs/code/` map zoals gespecificeerd in `config.toml`. Een typisch logbestand bevat timestamp, logniveau, en gedetailleerde berichten:
+
+```
+2025-04-18 15:30:22.241 | INFO     | wa_analysis.data_loading.processor:process_data:42 - Verwerking van datafile gestart
+2025-04-18 15:30:23.154 | DEBUG    | wa_analysis.data_loading.processor:add_columns:78 - Berekening van message_length gestart
+2025-04-18 15:30:24.012 | INFO     | wa_analysis.data_loading.processor:add_columns:92 - Feature engineering voltooid: 5 nieuwe kolommen toegevoegd
+2025-04-18 15:30:24.510 | WARNING  | wa_analysis.visualisation.time_series:make_timeseries:133 - Ontbrekende waarden gedetecteerd in tijdreeks
+```
 
 ## 🔍 Probleemoplossing
 
